@@ -6,23 +6,26 @@ const navbar= () =>{
     <nav className="navbar has-shadow">
         <div className="navbar-brand">
             <NavLink to="/">
-                <div className="is-size-5" title="Roksana's index page">
-                    <span className="icon mr-2 is-size-3"><i className="fas fa-tree" /></span>
-                    Home
+                <div className="is-size-5" title="Index page">
+                    <span className="icon-text">
+                    <span className="icon">
+                        <i className="fas fa-home"></i>
+                    </span>
+                    <span>Home</span>
+                    </span>
                 </div>
             </NavLink>
-            <NavLink to="/firstpage">1</NavLink>
-            <NavLink to="/secondpage">2</NavLink>
-            <NavLink to="/register">Register</NavLink>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/apply">Apply</NavLink>
         </div>
-        {/* <div className="navbar-menu">
+        <div className="navbar-menu">
             <div className="navbar-start">
-                <NavLink to="/firstpage">1</NavLink>
-              <NavLink to="/secondpage">2</NavLink>
+                <NavLink to="/candidatelist">Candidate List</NavLink>
+                <NavLink to="/apply">Apply</NavLink>
             </div>
-        </div> */}
+            <div className="navbar-end">
+                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/register">Register</NavLink>
+            </div>
+        </div>
     </nav>
 );
 }
