@@ -13,6 +13,9 @@ const navbar= () =>{
             </NavLink>
             <NavLink to="/firstpage">1</NavLink>
             <NavLink to="/secondpage">2</NavLink>
+            <NavLink to="/register">Register</NavLink>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/apply">Apply</NavLink>
         </div>
         {/* <div className="navbar-menu">
             <div className="navbar-start">
