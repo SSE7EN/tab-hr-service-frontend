@@ -18,6 +18,7 @@ const navbar= () =>{
         </div>
         <div className="navbar-menu">
             <div className="navbar-start">
+                <NavLink to="/apllicationslist">Applications List</NavLink>
                 <NavLink to="/candidatelist">Candidate List</NavLink>
                 <NavLink to="/employeeslist">Employees List</NavLink>
                 <NavLink to="/apply">Apply</NavLink>
