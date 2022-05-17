@@ -18,7 +18,7 @@ const navbar= () =>{
         </div>
         <div className="navbar-menu">
             <div className="navbar-start">
-                <NavLink to="/candidatelist">Candidate List</NavLink>
+                <NavLink to="/apllicationslist">Applications List</NavLink>
                 <NavLink to="/apply">Apply</NavLink>
             </div>
             <div className="navbar-end">
