@@ -6,6 +6,7 @@ import CandidateList from './components/pages/CandidateList'
 import Login from './components/pages/Login'
 import Register from './components/pages/Register'
 import Application from './components/pages/Application'
+import EmployeesList from './components/pages/EmployeesList'
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/apply" element={<Application />} />
+        <Route path="/employeeslist" element={<EmployeesList />} />
     </Routes>
   </BrowserRouter>
   );
