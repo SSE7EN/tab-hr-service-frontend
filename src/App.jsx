@@ -7,6 +7,7 @@ import Login from './components/pages/Login'
 import Register from './components/pages/Register'
 import Application from './components/pages/Application'
 import Candidate from './components/pages/Candidate';
+import EmployeesList from './components/pages/EmployeesList'
 
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/apply" element={<Application />} />
         <Route path="/candidate" element={<Candidate />} />
+        <Route path="/employeeslist" element={<EmployeesList />} />
     </Routes>
   </BrowserRouter>
   );
