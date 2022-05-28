@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getAuthHeader } from '../../storedData';
+import { useNavigate } from 'react-router';
+import API_URL from '../../config'
+import Axios from "axios";
 
 export default function Register() {
 	const [emailReg, setEailReg] = useState('');
@@ -8,6 +12,10 @@ export default function Register() {
 	const [lastNameReg, setLastNameReg] = useState('');
 
 	const [registered, setRegistered] = useState(false);
+
+	const [error, setError] = useState({});
+
+	const navigate = useNavigate();
 
 	const handleEmail = (e) => {
 		setEailReg(e.target.value);
@@ -25,6 +33,15 @@ export default function Register() {
 		setLastNameReg(e.target.value);
 	};
 
+	const handleError = (error) => {
+        console.log(error);
+        if(error.status === 401) {
+            navigate("/", { replace: true });
+        } else {
+        	setError({'message': {'type':'error', 'text':error.message}});
+        }
+    };
+
 	const successfullRegister = () => {
 		return (
 			<div className="notification is-success">
@@ -39,16 +56,18 @@ export default function Register() {
 		if (emailReg == '' || passwordReg == '' || firstNameReg == '' || lastNameReg == '') {
 			console.log("Fill all inputs");
 		} else {
-			/*Axios.post(API_URL + "/public/users/register", {
+		Axios.post(API_URL + "/users/admins", {
+				headers: getAuthHeader(),
 				email: emailReg,
 				firstName: firstNameReg,
 				lastName: lastNameReg,
 				password: passwordReg,
 			})
 				.then((response) => {
+					console.log(response)
 					setRegistered(true);
 				})
-				.catch(handleError)*/
+				.catch(handleError)
 		}
 	};
 

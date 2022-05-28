@@ -6,11 +6,6 @@ export default function ApllicationsList() {
 
     return (
         <div className="columns is-mobile is-multiline is-centered">
-            <div className="column is-12 has-text-centered is-size-1 has-text-weight-semibold">
-                <div className="box">
-                Applications List 
-                </div>
-            </div>
             <div className="column is-7 has-background-light mt-5">
                 <div className="box has-text-centered has-background-light">
                     <div className="columns is-centered is-multiline ">
