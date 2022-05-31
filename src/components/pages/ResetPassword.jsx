@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuthHeader } from '../../storedData';
+import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
@@ -47,7 +47,7 @@ export default function ResetPassword(){
         }
         else {
 		Axios.patch(API_URL + "/users/current/password", {
-				headers: getAuthHeader(),
+				headers: getAdminHeader(),
 				oldPassword: oldPassword,
 				newPassword: newPassword,
 			})
@@ -89,7 +89,7 @@ export default function ResetPassword(){
 					<form onSubmit={handleSubmit}>
 						<div className="field">
 							<p className="control has-icons-left">
-								<input className="input" onChange={handleOldPassword} value={oldPassword} type="password" placeholder="E-mail" />
+								<input className="input" onChange={handleOldPassword} value={oldPassword} type="text" placeholder="E-mail" />
 								<span className="icon is-small is-left">
 									<i className="fas fa-lock" />
 								</span>

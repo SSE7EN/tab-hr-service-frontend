@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { getAuthHeader, getAdminHeader } from '../../storedData';
@@ -44,11 +45,19 @@ export default function Login(){
             <div className="columns is-centered">
                 <div className="column is-half-tablet is-one-third-widescreen mt-6">
                     <div className="box has-text-centered has-background-light">
-                        <form onSubmit={getToken}>
-                            <input type="text" id="flogin" placeholder="Login" className="input" value="test"/>
-                            <input type="password" id="fpassword" placeholder="Password" className="input my-4"  value="test_password"/>
-                            <button className="button is-primary">Login!</button>
-                        </form>
+                        <div className="field">
+						    <label className="label">Login as Admin</label>
+					    </div>
+                        <div className="field">
+                            <form onSubmit={getToken}>
+                                <input type="text" id="flogin" placeholder="Login" className="input" value="test"/>
+                                <input type="password" id="fpassword" placeholder="Password" className="input my-4"  value="test_password"/>
+                                <button className="button is-primary">Login!</button>
+                            </form>
+                        </div>
+                        <div className="field">
+                            <NavLink to="/resetpassword">I Forgot My Password</NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
