@@ -8,6 +8,8 @@ import Register from './components/pages/Register'
 import Application from './components/pages/Application'
 import Candidate from './components/pages/Candidate';
 import EmployeesList from './components/pages/EmployeesList'
+import ResetPassword from './components/pages/ResetPassword';
+import LoginAsAdmin from './components/pages/LoginAsAdmin'
 
 
 export default function App() {
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/apply" element={<Application />} />
         <Route path="/candidate" element={<Candidate />} />
         <Route path="/employeeslist" element={<EmployeesList />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/loginadmin" element={<LoginAsAdmin />} />
     </Routes>
   </BrowserRouter>
   );
