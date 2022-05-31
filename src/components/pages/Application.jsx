@@ -52,7 +52,7 @@ export default function Application() {
 		if (emailCan === '' || firstNameCan === '' || lastNameCan === '' || appliedPosition === '') {
 			console.log("Fill all inputs");
 		} else {
-
+			
 		}
 	};
 

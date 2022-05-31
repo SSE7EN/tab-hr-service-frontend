@@ -12,6 +12,7 @@ export default function Register() {
 	const [lastNameReg, setLastNameReg] = useState('');
 
 	const [registered, setRegistered] = useState(false);
+	const [isError, setIsError] = useState(false);
 
 	const [error, setError] = useState({});
 
@@ -39,6 +40,7 @@ export default function Register() {
             navigate("/", { replace: true });
         } else {
         	setError({'message': {'type':'error', 'text':error.message}});
+			setIsError(true);
         }
     };
 
@@ -46,6 +48,14 @@ export default function Register() {
 		return (
 			<div className="notification is-success">
 				<label className="label">User Registered Succesfully</label>
+			</div>
+		);
+	};
+
+	const failedRegister = () => {
+		return (
+			<div className="notification is-danger">
+				<label className="label">Error Occured During Registration</label>
 			</div>
 		);
 	};
@@ -72,6 +82,8 @@ export default function Register() {
 					setRegistered(true);
 				})
 				.catch(handleError)
+
+				
 		}
 	};
 
@@ -79,11 +91,12 @@ export default function Register() {
 		<div className="columns is-centered">
 			<div className="column is-half-tablet is-one-third-widescreen mt-6">
 				<div className="box has-text-centered has-background-light">
-					<div>
+					<div className="field">
 						<label className="label">Employee Registration Form</label>
 					</div>
 					<div className="field">
 						{registered && successfullRegister()}
+						{isError && failedRegister()}
 					</div>
 					<form onSubmit={handleSubmit}>
 						<div className="field">
