@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 export default function Login(){
 
@@ -10,11 +11,16 @@ export default function Login(){
                         <div className="field">
 						    <label className="label">Employee Login Form</label>
 					    </div>
-                        <form>
-                            <input type="text" id="flogin" placeholder="Login" className="input"/>
-                            <input type="password" id="fpassword" placeholder="Password" className="input my-4"/>
-                            <button className="button is-primary">Login!</button>
-                        </form>
+                        <div className="field">
+                            <form>
+                                <input type="text" id="flogin" placeholder="Login" className="input"/>
+                                <input type="password" id="fpassword" placeholder="Password" className="input my-4"/>
+                                <button className="button is-primary">Login!</button>
+                            </form>
+                        </div>
+                        <div className="field">
+                            <NavLink to="/resetpassword">I Forgot My Password</NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
