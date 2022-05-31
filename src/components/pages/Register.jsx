@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuthHeader } from '../../storedData';
+import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
@@ -56,12 +56,16 @@ export default function Register() {
 		if (emailReg == '' || passwordReg == '' || firstNameReg == '' || lastNameReg == '') {
 			console.log("Fill all inputs");
 		} else {
-		Axios.post(API_URL + "/users/admins", {
-				headers: getAuthHeader(),
-				email: emailReg,
-				firstName: firstNameReg,
-				lastName: lastNameReg,
-				password: passwordReg,
+		Axios(API_URL + "/users/admins", {
+				headers: getAdminHeader(),
+				method: "post",
+				data: 
+				{
+					email: emailReg,
+					firstName: firstNameReg,
+					lastName: lastNameReg,
+					password: passwordReg,
+				}
 			})
 				.then((response) => {
 					console.log(response)

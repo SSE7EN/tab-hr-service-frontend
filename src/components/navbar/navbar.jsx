@@ -24,7 +24,6 @@ const navbar= () =>{
                 <NavLink to="/apply">Apply</NavLink>
             </div>
             <div className="navbar-end">
-                <NavLink to="/loginadmin">Login as Admin</NavLink>
                 <NavLink to="/login">Login</NavLink>
                 <NavLink to="/register">Register</NavLink>
             </div>
