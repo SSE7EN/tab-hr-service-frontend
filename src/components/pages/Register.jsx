@@ -66,12 +66,16 @@ export default function Register() {
 		if (emailReg == '' || passwordReg == '' || firstNameReg == '' || lastNameReg == '') {
 			console.log("Fill all inputs");
 		} else {
-		Axios.post(API_URL + "/users/admins", {
+		Axios(API_URL + "/users/admins", {
 				headers: getAuthHeader(),
-				email: emailReg,
-				firstName: firstNameReg,
-				lastName: lastNameReg,
-				password: passwordReg,
+				method: "post",
+				data: 
+				{
+					email: emailReg,
+					firstName: firstNameReg,
+					lastName: lastNameReg,
+					password: passwordReg,
+				}
 			})
 				.then((response) => {
 					console.log(response)
