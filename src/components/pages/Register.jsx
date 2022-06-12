@@ -82,8 +82,6 @@ export default function Register() {
 					setRegistered(true);
 				})
 				.catch(handleError)
-
-				
 		}
 	};
 

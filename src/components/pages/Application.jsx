@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getAuthHeader } from '../../storedData';
+import { useNavigate } from 'react-router';
+import API_URL from '../../config'
+import Axios from "axios";
 
 export default function Application() {
 	const [emailCan, setEailCan] = useState('');
 	const [firstNameCan, setFirstNameCan] = useState('');
 	const [lastNameCan, setLastNameCan] = useState('');
     const [appliedPosition, setAppliedPosition] = useState('');
-    const [fles, setFiles] = useState('');
+    const [state, setState] = useState({selectedFile: null, filePreviev: ''});
 
 	const [registered, setRegistered] = useState(false);
+
+	const [error, setError] = useState();
+
+	const navigate = useNavigate();
+
 
 	const handleEmail = (e) => {
 		setEailCan(e.target.value);
@@ -31,10 +40,12 @@ export default function Application() {
             console.log("no files added");
         }
         else {
+			console.log("O",e.target.files);
             console.log(e.target.files.length);
             for(var i = 0; i < e.target.files.length; i++) {
                 console.log(e.target.files[i].name);
             }
+			setState({selectedFile:e.target.files[0],filePreviev:URL.createObjectURL(e.target.files[0])});
         }
     };
 
@@ -46,13 +57,40 @@ export default function Application() {
 		);
 	};
 
+	const handleError = (error) => {
+        console.log(error);
+        if(error.status === 401) {
+            navigate("/", { replace: true });
+        } else {
+        	setError({'message': {'type':'error', 'text':error.message}});
+        }
+    };
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		console.log(emailCan, firstNameCan, lastNameCan, appliedPosition);
 		if (emailCan === '' || firstNameCan === '' || lastNameCan === '' || appliedPosition === '') {
 			console.log("Fill all inputs");
 		} else {
-			
+			let file = state.selectedFile;
+			console.log("r",file);
+
+
+			let data = new FormData();
+            data.append('file', file); 
+			data.append('dto', [{"documentType": "CV","applicationId": 0}]); 
+
+			Axios.post(API_URL + "/documents",{
+				headers: {
+                    ...getAuthHeader(),
+                    "Content-Type":'multipart/form-data'
+                },
+				data: data
+			})
+				.then((response) => {
+					console.log(response)
+				})
+				.catch(handleError)
 		}
 	};
 
@@ -100,20 +138,20 @@ export default function Application() {
 							</p>
 						</div>
                         <div className="field is-grouped is-grouped-centered mt-4">
-                                <div className="file is-boxed">
-                                    <label className="file-label">
-                                        <input className="file-input" onChange={handleImages} type="file" multiple/>
-                                        <span className="file-cta">
-                                            <span className="file-icon">
-                                                <i className="fas fa-upload" />
-                                            </span>
-                                            <span className="file-label">
-                                                Upload Files
-                                            </span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
+							<div className="file is-boxed">
+								<label className="file-label">
+									<input className="file-input" onChange={handleImages} type="file" multiple/>
+									<span className="file-cta">
+										<span className="file-icon">
+											<i className="fas fa-upload" />
+										</span>
+										<span className="file-label">
+											Upload Files
+										</span>
+									</span>
+								</label>
+							</div>
+						</div>
 						<button className="button is-primary">Apply</button>
 					</form>
 				</div>
