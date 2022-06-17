@@ -50,8 +50,8 @@ export default function Login(){
 					    </div>
                         <div className="field">
                             <form onSubmit={getToken}>
-                                <input type="text" id="flogin" placeholder="Login" className="input" value="test"/>
-                                <input type="password" id="fpassword" placeholder="Password" className="input my-4"  value="test_password"/>
+                                <input type="text" id="flogin" placeholder="Login" className="input"/>
+                                <input type="password" id="fpassword" placeholder="Password" className="input my-4"/>
                                 <button className="button is-primary">Login!</button>
                             </form>
                         </div>

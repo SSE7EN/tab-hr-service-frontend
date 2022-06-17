@@ -10,6 +10,7 @@ import Application from './components/pages/Application'
 import Candidate from './components/pages/Candidate';
 import EmployeesList from './components/pages/EmployeesList'
 import ResetPassword from './components/pages/ResetPassword';
+import RegisterCandidate from './components/pages/RegisterCandidate.jsx';
 
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/apllicationslist" element={<ApllicationsList />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/registerCandidate" element={<RegisterCandidate />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/apply" element={<Application />} />

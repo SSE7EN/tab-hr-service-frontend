@@ -57,6 +57,7 @@ export default function Navbar(){
             </div>
             <div className="navbar-end">
                 { state.user !== undefined && <LoggedUserDropdown user={state.user}/> }
+                <NavLink to="/register"> Register </NavLink>
                 { state.user === undefined && <NotLoggedUserRight /> }
             </div>
         </div>

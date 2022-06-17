@@ -6,6 +6,7 @@ export default function NotLoggedUserItems() {
         <>
             <NavLink to="/register"> Register </NavLink>
             <NavLink to="/login"> Login </NavLink>
+            <NavLink to="/registerCandidate"> Register Candidate</NavLink>
         </>
     );
 }

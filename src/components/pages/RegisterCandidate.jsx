@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
 
-export default function Register() {
+export default function RegisterCandidate() {
 	const [emailReg, setEailReg] = useState('');
 	const [passwordReg, setPasswordReg] = useState('');
 	const [firstNameReg, setFirstNameReg] = useState('');
@@ -66,8 +66,7 @@ export default function Register() {
 		if (emailReg == '' || passwordReg == '' || firstNameReg == '' || lastNameReg == '') {
 			console.log("Fill all inputs");
 		} else {
-		Axios(API_URL + "/users/admins", {
-				headers: getAuthHeader(),
+		Axios(API_URL + "/candidates", {
 				method: "post",
 				data: 
 				{
@@ -80,6 +79,7 @@ export default function Register() {
 				.then((response) => {
 					console.log(response)
 					setRegistered(true);
+					setIsError(false);
 				})
 				.catch(handleError)
 		}
@@ -90,7 +90,7 @@ export default function Register() {
 			<div className="column is-half-tablet is-one-third-widescreen mt-6">
 				<div className="box has-text-centered has-background-light">
 					<div className="field">
-						<label className="label">Employee Registration Form</label>
+						<label className="label">Candidate Registration Form</label>
 					</div>
 					<div className="field">
 						{registered && successfullRegister()}
