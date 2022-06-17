@@ -41,6 +41,7 @@ export default function RegisterCandidate() {
         } else {
         	setError({'message': {'type':'error', 'text':error.message}});
 			setIsError(true);
+			setRegistered(false);
         }
     };
 

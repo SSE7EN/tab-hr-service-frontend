@@ -41,6 +41,7 @@ export default function Register() {
         } else {
         	setError({'message': {'type':'error', 'text':error.message}});
 			setIsError(true);
+			setRegistered(false);
         }
     };
 
@@ -80,6 +81,7 @@ export default function Register() {
 				.then((response) => {
 					console.log(response)
 					setRegistered(true);
+					setIsError(false);
 				})
 				.catch(handleError)
 		}
