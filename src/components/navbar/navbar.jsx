@@ -2,7 +2,8 @@ import React, {useState, useEffect} from 'react';
 import NavLink from './navbarElements';
 import Axios from 'axios';
 import API_URL from '../../config'
-import { getAuthHeader, getAdminHeader } from '../../storedData';
+import { getAuthHeader, getAdminHeader, isAdmin } from '../../storedData';
+import AdminDropdown from './adminDropdown';
 import LoggedUserDropdown from './loggedUserDropdown';
 import NotLoggedUserRight from './notLoggedUserRight';
 import pubsub from '../../pubsub';
@@ -52,7 +53,8 @@ export default function Navbar(){
         </div>
         <div className="navbar-menu">
             <div className="navbar-end">
-                { state.user !== undefined && <LoggedUserDropdown user={state.user}/> }
+                { state.user !== undefined && isAdmin()==true && <AdminDropdown user={state.user}/> }
+                { state.user !== undefined && isAdmin()==false && <LoggedUserDropdown user={state.user}/> }
                 { state.user === undefined && <NotLoggedUserRight /> }
             </div>
         </div>

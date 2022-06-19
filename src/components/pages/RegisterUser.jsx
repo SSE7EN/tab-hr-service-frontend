@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
 
-export default function Register() {
+export default function RegisterUser() {
 	const [emailReg, setEailReg] = useState('');
 	const [passwordReg, setPasswordReg] = useState('');
 	const [firstNameReg, setFirstNameReg] = useState('');
@@ -68,14 +68,14 @@ export default function Register() {
 			console.log("Fill all inputs");
 		} else {
 		Axios(API_URL + "/users/admins", {
-				headers: getAuthHeader(),
+				headers: getAdminHeader(),
 				method: "post",
 				data: 
 				{
 					email: emailReg,
+					password: passwordReg,
 					firstName: firstNameReg,
 					lastName: lastNameReg,
-					password: passwordReg,
 				}
 			})
 				.then((response) => {
