@@ -24,7 +24,6 @@ export default function Position() {
              array[i] = event.target.selectedOptions[i].value;
          }
          setProgrammingLanguageCan(array);
-         console.log(ProgrammingLanguageCan)
     };
 
     const handleSubmit = (e) => {

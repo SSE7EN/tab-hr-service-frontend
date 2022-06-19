@@ -9,6 +9,7 @@ import RegisterUser from './components/pages/RegisterUser'
 import Application from './components/pages/Application'
 import Candidate from './components/pages/Candidate';
 import EmployeesList from './components/pages/EmployeesList'
+import Position from './components/pages/Position'
 import ResetPassword from './components/pages/ResetPassword';
 import RegisterCandidate from './components/pages/RegisterCandidate.jsx';
 
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/apply/:id" element={<Application />} />
         <Route path="/candidate" element={<Candidate />} />
         <Route path="/employeeslist" element={<EmployeesList />} />
+        <Route path="/position" element={<Position />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
     </Routes>
   </BrowserRouter>
