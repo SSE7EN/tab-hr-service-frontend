@@ -51,6 +51,12 @@ export default function Navbar(){
             </NavLink>
         </div>
         <div className="navbar-menu">
+            <div className="navbar-start">
+                <NavLink to="/apllicationslist">Applications List</NavLink>
+                <NavLink to="/employeeslist">Employees List</NavLink>
+                <NavLink to="/apply">Apply</NavLink>
+                <NavLink to="/position">Position</NavLink>
+            </div>
             <div className="navbar-end">
                 { state.user !== undefined && <LoggedUserDropdown user={state.user}/> }
                 { state.user === undefined && <NotLoggedUserRight /> }
