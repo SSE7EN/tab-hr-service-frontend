@@ -8,6 +8,7 @@ import Register from './components/pages/Register'
 import Application from './components/pages/Application'
 import Candidate from './components/pages/Candidate';
 import EmployeesList from './components/pages/EmployeesList'
+import Position from './components/pages/Position'
 
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/apply" element={<Application />} />
         <Route path="/candidate" element={<Candidate />} />
         <Route path="/employeeslist" element={<EmployeesList />} />
+        <Route path="/position" element={<Position />} />
     </Routes>
   </BrowserRouter>
   );
