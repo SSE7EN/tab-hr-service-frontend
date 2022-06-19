@@ -5,7 +5,6 @@ import API_URL from '../../config'
 import { getAuthHeader, getAdminHeader } from '../../storedData';
 import LoggedUserDropdown from './loggedUserDropdown';
 import NotLoggedUserRight from './notLoggedUserRight';
-import NotLoggedUserLeft from './notLoggedUserLeft';
 import pubsub from '../../pubsub';
 
 export default function Navbar(){
@@ -38,8 +37,8 @@ export default function Navbar(){
     }, []);
 
     return (
-    <nav className="navbar has-shadow">
-        <div className="navbar-brand">
+    <nav className="navbar has-background-primary-light">
+        <div className="navbar-brand ">
             <NavLink to="/">
                 <div className="is-size-5" title="Index page">
                     <span className="icon-text">
@@ -52,9 +51,6 @@ export default function Navbar(){
             </NavLink>
         </div>
         <div className="navbar-menu">
-            <div className="navbar-start">
-                { state.user === undefined && <NotLoggedUserLeft/> }
-            </div>
             <div className="navbar-end">
                 { state.user !== undefined && <LoggedUserDropdown user={state.user}/> }
                 { state.user === undefined && <NotLoggedUserRight /> }

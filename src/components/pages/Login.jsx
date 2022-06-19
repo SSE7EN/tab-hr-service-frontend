@@ -46,7 +46,7 @@ export default function Login(){
                 <div className="column is-half-tablet is-one-third-widescreen mt-6">
                     <div className="box has-text-centered has-background-light">
                         <div className="field">
-						    <label className="label">Login as Admin</label>
+						    <label className="label">Login</label>
 					    </div>
                         <div className="field">
                             <form onSubmit={getToken}>

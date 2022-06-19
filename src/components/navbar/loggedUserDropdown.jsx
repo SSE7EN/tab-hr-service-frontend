@@ -4,11 +4,11 @@ import NavLink from './navbarElements';
 export default function LoggedUserDropdown({ user }) {
     return (
         <>
-            <div className="navbar-item has-dropdown is-hoverable">
-                <div className="navbar-link">
+            <div className="navbar-item has-dropdown is-hoverable ">
+                <div className="navbar-link has-background-primary-light">
                     {user.firstName || "Grzegorz"} {user.lastName || "Brzęczyszczykiewicz"}
                 </div>
-                <div className="navbar-dropdown is-boxed">
+                <div className="navbar-dropdown is-boxed has-background-primary-light">
                     <div className="navbar-item is-size-7 my-0 py-0">
                         Your ID is <strong className="ml-1">{user.id}</strong>
                     </div>

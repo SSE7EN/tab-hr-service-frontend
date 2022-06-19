@@ -67,7 +67,7 @@ export default function Register() {
 			console.log("Fill all inputs");
 		} else {
 		Axios(API_URL + "/users/admins", {
-				headers: getAdminHeader(),
+				headers: getAuthHeader(),
 				method: "post",
 				data: 
 				{

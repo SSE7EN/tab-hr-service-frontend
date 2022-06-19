@@ -22,7 +22,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/apply" element={<Application />} />
+        <Route path="/apply/:id" element={<Application />} />
         <Route path="/candidate" element={<Candidate />} />
         <Route path="/employeeslist" element={<EmployeesList />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
