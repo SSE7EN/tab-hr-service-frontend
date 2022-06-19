@@ -8,7 +8,7 @@ import sampleletter from '../pdf/motivational_letter.pdf';
 export default function Candidate() {
     //pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-    const url_pdf = "ttp://africau.edu/images/default/sample.pdf";
+    const url_pdf = "http://africau.edu/images/default/sample.pdf";
 
     const [state, setState] = useState({CVPages: 1, CVPage: 1, MLPages: 1, MLPage: 1})
 
