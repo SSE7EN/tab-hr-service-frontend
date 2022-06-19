@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-//import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Axios from "axios";
 import API_URL, { PHOTOS_URL } from "../../config";
 import { getAuthHeader } from "../../storedData";
 export default function Position() {
     const [descriptionCan, setDescriptionCan] = useState("");
     const [nameCan, setNameCan] = useState("");
-    const [ProgrammingLanguageCan, setProgrammingLanguageCan] = useState("JAVA");
+    const [ProgrammingLanguageCan, setProgrammingLanguageCan] = useState([]);
 
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     const handleDescription = (e) => {
         setDescriptionCan(e.target.value);
@@ -19,12 +19,16 @@ export default function Position() {
     };
 
     const handleProgrammingLanguage = (event) => {
-        setProgrammingLanguageCan(event.target.value)
+        var array = [event.target.selectedOptions.length];
+         for (var i=0; i<event.target.selectedOptions.length; i++){
+             array[i] = event.target.selectedOptions[i].value;
+         }
+         setProgrammingLanguageCan(array);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (descriptionCan === '' || nameCan === '' || ProgrammingLanguageCan === '') {
+        if (descriptionCan === '' || nameCan === '' || ProgrammingLanguageCan === [null]) {
 			console.log("Fill all inputs");
 		} else {
             Axios(API_URL + "/positions", {
@@ -33,13 +37,13 @@ export default function Position() {
                 data: {
                     description: descriptionCan,
                     name: nameCan,
-                    ProgrammingLanguage: ProgrammingLanguageCan,
+                    programmingLanguages: ProgrammingLanguageCan,
                 },
             })
-            // .then((response) => {
-            //     navigate("/position", { replace: true });
-            // })
-            ;
+            .then((response) => {
+                navigate("/position", { replace: true });
+            })
+            
 		}
     };
 
@@ -48,16 +52,15 @@ export default function Position() {
             <div className="columns is-centered">
                 <div className="column is-half-tablet is-one-third-widescreen mt-6">
                     <div className="box has-text-centered has-background-light">
-                        <h3 className="text-center">Position Form</h3>
+                        <div className="has-text-centered is-6 mb-4">Position Form</div>
                         <form onSubmit={handleSubmit}>
 
-
-                            <p className="control has-icons-left">
+                            <div className="control has-icons-left">
 								<input className="input" onChange={handleName} value={nameCan} type="text" placeholder="Name" />
 								<span className="icon is-small is-left">
 									<i className="fas fa-id-card-alt" />
 								</span>
-							</p>
+							</div>
 
                             <textarea
                                 placeholder="Description"
@@ -67,12 +70,14 @@ export default function Position() {
                                 onChange={handleDescription}
                             />
 
-                            <select value={ProgrammingLanguageCan} onChange={handleProgrammingLanguage} className="select is-small is-left">
-                                <option value="JAVA">JAVA</option>
-                                <option value="PYTHON">PYTHON</option>
-                                <option value="C_SHARP">C_SHARP</option>
-                                <option value="C_PLUS_PLUS">C_PLUS_PLUS</option>
-                            </select>
+                            <div className="select is-multiple is-small is-left" onChange={handleProgrammingLanguage}>
+                                <select multiple size="4">
+                                    <option value="JAVA">Java</option>
+                                    <option value="PYTHON">Python</option>
+                                    <option value="C_SHARP">C#</option>
+                                    <option value="C_PLUS_PLUS">C++</option>
+                                </select>
+                            </div>
                             <br/>
 
                             

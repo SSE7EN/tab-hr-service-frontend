@@ -8,10 +8,10 @@ import Axios from "axios";
 
 export default function Application() {
 	const { id } = useParams();
-	const [emailCan, setEailCan] = useState('');
+	const [emailCan, setEmailCan] = useState('');
 	const [firstNameCan, setFirstNameCan] = useState('');
 	const [lastNameCan, setLastNameCan] = useState('');
-    const [appliedPosition, setAppliedPosition] = useState('');
+    const [appliedPosition, setAppliedPosition] = useState(0);
     const [state, setState] = useState({selectedFile: null, filePreviev: ''});
 
 	const[positionId, setPositionID] = useState(0);
@@ -27,7 +27,7 @@ export default function Application() {
 
 
 	const handleEmail = (e) => {
-		setEailCan(e.target.value);
+		setEmailCan(e.target.value);
 	};
 
 	const handleFirstName = (e) => {
@@ -85,6 +85,24 @@ export default function Application() {
             setPositionName(response.data.name);
             setPositionDescription(response.data.description);
             setPositionLanguages(response.data.programmingLanguages);
+			setAppliedPosition(response.data.id);
+
+        })
+        .catch(error => {
+            console.log(error);
+            setError(true);
+        })
+
+		Axios.get(API_URL + "/users/current", {
+            headers: getAuthHeader()
+        })
+        .then((response) => {
+            setError(false);
+
+            // setting those here to fill inputs for update with default values
+            setEmailCan(response.data.email);
+            setFirstNameCan(response.data.firstName);
+            setLastNameCan(response.data.lastName);
 
         })
         .catch(error => {
@@ -98,24 +116,24 @@ export default function Application() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		console.log(emailCan, firstNameCan, lastNameCan, appliedPosition);
-		if (emailCan === '' || firstNameCan === '' || lastNameCan === '' || appliedPosition === '') {
+		if (emailCan === '' || firstNameCan === '' || lastNameCan === '') {
 			console.log("Fill all inputs");
 		} else {
 			let file = state.selectedFile;
 			console.log("r",file);
 
-			const obj = {
-				documentType: "CV",
-				applicationId: 0
-			}
+			// const obj = {
+			// 	documentType: "CV",
+			// 	applicationId: 0
+			// }
 
-			const json = JSON.stringify(obj);
+			// const json = JSON.stringify(obj);
 
 
 
-			const data = new FormData();
-            data.append('file', file); 
-			data.append('dto', ('{"documentType": "CV", "applicationId": 0}', {contentType: 'application/json'}));
+			// const data = new FormData();
+            // data.append('file', file); 
+			// data.append('dto', ('{"documentType": "CV", "applicationId": 0}', {contentType: 'application/json'}));
 
 			// data.append('dto',JSON.stringify({
 			// 	"id": 0,
@@ -128,9 +146,14 @@ export default function Application() {
 			// })]));
 			
 
-			Axios.post(API_URL + "/documents/", {
-				headers: data.getHeaders(),
-				formData: data
+			Axios.post(API_URL + "/applications", {
+				headers: getAuthHeader(),
+				data: {
+					id: 0,
+					positionId: positionId,
+					description: "string"
+				}
+				//formData: data
 			})
 			
 				.then((response) => {
@@ -206,14 +229,6 @@ export default function Application() {
 						<div className="field">
 							<p className="control has-icons-left">
 								<input className="input" onChange={handleLastName} value={lastNameCan} type="text" placeholder="Last Name" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-id-card-alt" />
-								</span>
-							</p>
-						</div>
-                        <div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleAppliedPosition} value={appliedPosition} type="text" placeholder="Applied Position" />
 								<span className="icon is-small is-left">
 									<i className="fas fa-id-card-alt" />
 								</span>
