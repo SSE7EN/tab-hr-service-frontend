@@ -25,7 +25,6 @@ export default function HomePage() {
 
     useEffect(() => {
         Axios.get(API_URL + '/positions', {
-            headers: getAuthHeader(),
             method: "get",
         })
         .then((response) => {

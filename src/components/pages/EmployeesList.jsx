@@ -1,69 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import API_URL from '../../config';
+import { getAuthHeader, getCurrentUserId } from '../../storedData';
 
 export default function EmployeesList() {
+    const [state, setState] = useState({employee: [], searchInput: '', editedProductId: 0});
+    const navigate = useNavigate();
+
+    const [isError, setIsError] = useState(false);
+
+	const [error, setError] = useState({});
+
+    const handleError = (error) => {
+        console.log(error);
+        if(error.status === 401) {
+            navigate("/", { replace: true });
+        } else {
+        	setError({'message': {'type':'error', 'text':error.message}});
+			setIsError(true);
+        }
+    };
+
+    useEffect(() => {
+        Axios.get(API_URL + '/users', {
+            headers: getAuthHeader(),
+            method: "get",
+        })
+        .then((response) => {
+            console.log(response.data.content)
+            setState({employee:response.data.content, searchInput: state.searchInput, editedProductId: state.editedProductId});
+        })
+        .catch(handleError);
+    }, []);
+
+
     return (
         <div className="columns is-mobile is-multiline is-centered">
-            <div className="column is-8 mt-2">
-                <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered">
-                <thead>
-                    <tr className="is-uppercase has-background-light">
-                        <th className="is-vcentered">Name</th>
-                        <th className="is-vcentered">position</th>
-                        <th className="is-vcentered">E-mail</th>
-                        <th className="is-vcentered" colSpan="2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Grzegorz Brzęczyszczykiewicz</td>
-                        <td>Admin</td>
-                        <td>gbrzeczyszczykiewicz420@gmail.com</td>
-                        <td>
-                            
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jan Nowak</td>
-                        <td>Recruiter</td>
-                        <td>jnowak365@gmail.com</td>
-                        <td>
-                            <button className="button is-small is-info">Change Role</button>
-                        </td>
-                        <td>
-                            <button className="button is-small is-danger">Block</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Kamil Nowak</td>
-                        <td>Manager</td>
-                        <td>knowak777@gmail.com</td>
-                        <td>
-                            <button className="button is-small is-info">Change Role</button>
-                        </td>
-                        <td>
-                            <button className="button is-small is-danger">Block</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Mateusz Nowak</td>
-                        <td>
-                            <div className="has-text-danger">BLOCKED</div>
-                        </td>
-                        <td>mnowak777@gmail.com</td>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            <button className="button is-small is-success">Unblock</button>
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
+            <div className="column is-6 mt-3">
+                {<Table employee={state.employee}/>}
             </div>
         </div>
     );
 
+}
+
+
+function Table({employee}) {
+    return (
+        <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered" >
+            <thead>
+                <tr className="is-uppercase has-background-light">
+                    <th  className="is-vcentered">ID</th>
+                    <th  className="is-vcentered">Name</th>
+                    <th  className="is-vcentered">Created</th>
+                    <th  className="is-vcentered">Role</th>
+                    <th  className="is-vcentered">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {employee.map((list,index) =>{ 
+                    return(
+                        <tr key={index}>
+                            <td  className="is-vcentered">{list.id}</td>
+                            <td  className="is-vcentered">{list.firstName + " " + list.lastName}</td>
+                            <td  className="is-vcentered">{list.createdOn}</td>
+                            <td  className="is-vcentered">{list.role}</td>
+                            <td  className="is-vcentered">
+                                <button className="button is-small is-danger">
+                                    <span className="icon is-small">
+                                        <i className="fas fa-trash"/>
+                                    </span>
+                                    <span>Block</span>
+                                </button>
+
+                            </td>
+                        </tr>
+                    )
+                    })}
+            </tbody>
+        </table>
+    );
 }

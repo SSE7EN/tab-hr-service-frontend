@@ -11,10 +11,12 @@ export default function Application() {
 	const [emailCan, setEmailCan] = useState('');
 	const [firstNameCan, setFirstNameCan] = useState('');
 	const [lastNameCan, setLastNameCan] = useState('');
-    const [appliedPosition, setAppliedPosition] = useState(0);
-    const [state, setState] = useState({selectedFile: null, filePreviev: ''});
+    const [state, setState] = useState({selectedCVFile: null, selectedMLFile: null});
 
-	const[positionId, setPositionID] = useState(0);
+	const[CV_ID,setCV_ID] = useState(-1);
+	const[ML_ID,setML_ID] = useState(-1);
+	const[applicationID, setApplicationID] = useState(0);
+	const[positionId, setPositionID] = useState(-1);
 	const[positionName, setPositionName] = useState('');
 	const[positionDescription, setPositionDescription] = useState('');
 	const[positionLanguages, setPositionLanguages] = useState([]);
@@ -38,22 +40,62 @@ export default function Application() {
 		setLastNameCan(e.target.value);
 	};
 
-    const handleAppliedPosition = (e) => {
-        setAppliedPosition(e.target.value);
-    };
-
-    const handleImages = (e) => {
-        if(e.target.files.length == 0) {
-            console.log("no files added");
+	const handleML = (e) =>{
+		if(e.target.files.length == 0) {
+            console.log("no letter added");
         }
         else {
-			console.log("O",e.target.files);
-            console.log(e.target.files.length);
             for(var i = 0; i < e.target.files.length; i++) {
                 console.log(e.target.files[i].name);
             }
-			setState({selectedFile:e.target.files[0],filePreviev:URL.createObjectURL(e.target.files[0])});
+			setState({selectedCVFile: state.selectedCVFile, selectedMLFile: e.target.files[0]});
+
+			const data = new FormData();
+			data.append("file", e.target.files[0]);
+
+
+			Axios.post(API_URL + "/documents", data,{
+				headers: {
+					...getAuthHeader(),
+					"Content-Type":'multipart/form-data'},
+			})
+			
+				.then((response) => {
+					console.log("Send letter")
+					console.log(response.data.id)
+					setML_ID(response.data.id);
+				})
+				.catch(handleError)
         }
+	}
+
+    const handleCV = (e) => {
+        if(e.target.files.length == 0) {
+            console.log("no CV added");
+        }
+        else {
+            for(var i = 0; i < e.target.files.length; i++) {
+                console.log(e.target.files[i].name);
+            }
+			setState({selectedCVFile: e.target.files[0], selectedMLFile: state.selectedMLFile});
+
+			const data = new FormData();
+			data.append("file", e.target.files[0]);
+
+			Axios.post(API_URL + "/documents", data,{
+				headers: {
+					...getAuthHeader(),
+					"Content-Type":'multipart/form-data'},
+			})
+			
+				.then((response) => {
+					console.log("Send CV")
+					console.log(response.data.id)
+					setCV_ID(response.data.id);
+				})
+				.catch(handleError)
+		}
+
     };
 
 	const successfullRegister = () => {
@@ -69,10 +111,17 @@ export default function Application() {
         if(error.status === 401) {
             navigate("/", { replace: true });
         } else {
-        	setError({'message': {'type':'error', 'text':error.message}});
+			navigate("/applicationsent",
+			{
+				state: {
+					errror: true,
+					applicationID: -1,
+					CV_ID: -1,
+					ML_ID: -1
+				}
+			});
         }
     };
-
 	useEffect(() => {
 		Axios.get(API_URL + "/positions/" + id, {
             headers: getAuthHeader()
@@ -85,7 +134,6 @@ export default function Application() {
             setPositionName(response.data.name);
             setPositionDescription(response.data.description);
             setPositionLanguages(response.data.programmingLanguages);
-			setAppliedPosition(response.data.id);
 
         })
         .catch(error => {
@@ -113,55 +161,41 @@ export default function Application() {
         // eslint-disable-next-line
     }, []);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(emailCan, firstNameCan, lastNameCan, appliedPosition);
+		console.log(emailCan, firstNameCan, lastNameCan, positionId);
 		if (emailCan === '' || firstNameCan === '' || lastNameCan === '') {
 			console.log("Fill all inputs");
 		} else {
-			let file = state.selectedFile;
-			console.log("r",file);
-
-			// const obj = {
-			// 	documentType: "CV",
-			// 	applicationId: 0
-			// }
-
-			// const json = JSON.stringify(obj);
-
-
-
-			// const data = new FormData();
-            // data.append('file', file); 
-			// data.append('dto', ('{"documentType": "CV", "applicationId": 0}', {contentType: 'application/json'}));
-
-			// data.append('dto',JSON.stringify({
-			// 	"id": 0,
-			// 	"documentType": "CV"                
-			// }));
-
-			// data.append('dto', new Blob([JSON.stringify({
-			// 	"id": 0,
-			// 	"documentType": "CV"                
-			// })]));
 			
-
-			Axios.post(API_URL + "/applications", {
+			//send position
+			Axios(API_URL + "/applications", {
+				method: 'post',
 				headers: getAuthHeader(),
 				data: {
 					id: 0,
-					positionId: positionId,
+					positionId: 1,
 					description: "string"
 				}
-				//formData: data
 			})
 			
 				.then((response) => {
+					console.log("Send position")
 					console.log(response)
+					navigate("/applicationsent",
+					{
+						state: {
+							errror: false,
+							applicationID: response.data.id,
+							CV_ID: CV_ID,
+							ML_ID: ML_ID
+						}
+					});
 				})
 				.catch(handleError)
 		}
 	};
+
 
 	function RequiredLanguage(languagearray){
 		let languages = "";
@@ -236,14 +270,27 @@ export default function Application() {
 						</div>
                         <div className="field is-grouped is-grouped-centered mt-4">
 							<div className="file is-boxed">
-								<label className="file-label">
-									<input className="file-input" onChange={handleImages} type="file" multiple/>
+								<label className="file-label mx-4">
+									<input className="file-input" onChange={handleCV} type="file" multiple/>
 									<span className="file-cta">
 										<span className="file-icon">
 											<i className="fas fa-upload" />
 										</span>
 										<span className="file-label">
-											Upload Files
+											Upload CV
+										</span>
+									</span>
+								</label>
+							</div>
+							<div className="file is-boxed">
+								<label className="file-label mx-4">
+									<input className="file-input" onChange={handleML} type="file" multiple/>
+									<span className="file-cta">
+										<span className="file-icon">
+											<i className="fas fa-upload" />
+										</span>
+										<span className="file-label">
+											Upload Motivational Letter
 										</span>
 									</span>
 								</label>

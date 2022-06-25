@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
@@ -131,6 +131,9 @@ export default function RegisterCandidate() {
 							</p>
 						</div>
 						<button className="button is-primary">Sign Up</button>
+						<div className="field">
+                            <NavLink to="/login">Already have an account? Login</NavLink>
+                        </div>
 					</form>
 				</div>
 			</div>

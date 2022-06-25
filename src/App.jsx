@@ -12,6 +12,9 @@ import EmployeesList from './components/pages/EmployeesList'
 import Position from './components/pages/Position'
 import ResetPassword from './components/pages/ResetPassword';
 import RegisterCandidate from './components/pages/RegisterCandidate.jsx';
+import PositionsList from './components/pages/PositionsList.jsx';
+import ApplicationSent from './components/pages/ApplicationSent.jsx';
+
 
 
 export default function App() {
@@ -29,7 +32,9 @@ export default function App() {
         <Route path="/candidate" element={<Candidate />} />
         <Route path="/employeeslist" element={<EmployeesList />} />
         <Route path="/position" element={<Position />} />
+        <Route path="/positionlist" element={<PositionsList />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
+        <Route path="/applicationsent" element={<ApplicationSent />} />
     </Routes>
   </BrowserRouter>
   );
