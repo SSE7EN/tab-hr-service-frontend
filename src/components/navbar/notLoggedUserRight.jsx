@@ -1,12 +1,11 @@
 import React from 'react';
 import NavLink from './navbarElements';
 
-export default function NotLoggedUserItems() {
+export default function NotLoggedUserRight() {
     return (
         <div className="navbar-brand ">
-            <NavLink to="/register"> Register </NavLink>
+            <NavLink to="/register_candidate"> Register </NavLink>
             <NavLink to="/login"> Login </NavLink>
-            <NavLink to="/registerCandidate"> Register Candidate</NavLink>
-        </>
+        </div>
     );
 }
