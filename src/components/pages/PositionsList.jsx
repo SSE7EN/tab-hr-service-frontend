@@ -6,12 +6,39 @@ import API_URL from '../../config';
 import { getAuthHeader, getCurrentUserId } from '../../storedData';
 
 export default function PositionsList() {
-    const [state, setState] = useState({positionsExist: false, positions: [], searchInput: '', editedProductId: 0});
+    const [state, setState] = useState({positionsExist: false, positions: [], editedProductId: 0, editBox: false});
+
     const navigate = useNavigate();
+
+    const handleDescription = (e) => {
+        e.preventDefault();
+        setDescription(e.target.value);
+    };
+
+    const handleName = (e) => {
+        e.preventDefault();
+        setName(e.target.value);
+    };
+
+    const handleProgrammingLanguage = (event) => {
+        event.preventDefault();
+        var array = [event.target.selectedOptions.length];
+         for (var i=0; i<event.target.selectedOptions.length; i++){
+             array[i] = event.target.selectedOptions[i].value;
+         }
+         setLanguagues(array);
+    };
 
     const [isError, setIsError] = useState(false);
 
 	const [error, setError] = useState({});
+
+    const[id, setId] = useState(-1);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [languages, setLanguagues] = useState([]);
+
+
 
     const handleError = (error) => {
         console.log(error);
@@ -30,70 +57,120 @@ export default function PositionsList() {
         })
         .then((response) => {
             console.log(response.data.content)
-            setState({positionsExist: true, positions:response.data.content, searchInput: state.searchInput, editedProductId: state.editedProductId});
+            setState({positionsExist: true, positions:response.data.content, editedProductId: state.editedProductId});
         })
         .catch(handleError);
     }, []);
 
+    const sendEdit = (e) => {
+        e.preventDefault();
+        
+        Axios.put(API_URL + "/positions/" + id, {
+            headers: getAuthHeader(),
+            data: {
+                name: name,
+                description: description,
+                programmingLanguages: languages
+            }
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+    
+    const changeID = (e) => {
+        e.preventDefault();
+        setId(e.currentTarget.id);
+    }
+
+    function Table({positions}) {
+        const navigate = useNavigate();
+        return (
+            <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered" >
+                <thead>
+                    <tr className="is-uppercase has-background-light">
+                        <th  className="is-vcentered">ID</th>
+                        <th  className="is-vcentered">Name</th>
+                        <th  className="is-vcentered">Description</th>
+                        <th  className="is-vcentered">Languagues</th>
+                        <th  className="is-vcentered">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {positions.map((list,index) =>{ 
+                        return(
+                            <tr key={index}>
+                                <td  className="is-vcentered">{list.id}</td>
+                                <td  className="is-vcentered">{list.name}</td>
+                                <td  className="is-vcentered">{list.description}</td>
+                                <td  className="is-vcentered">{RequiredLanguage(list.programmingLanguages)}</td>
+                                <td  className="is-vcentered">
+                                    <button className="button is-small is-rounded is-warning" id={list.id}
+                                    onClick = {(e) => {setState({positionsExist: state.positionsExist, positions: state.positions, editedProductId: state.editedProductId, editBox: true});
+                                    changeID(e)}}>
+                                        <span className="icon is-small">
+                                            <i className="fas fa-cogs"/>
+                                        </span>
+                                        <span>Edit</span>
+                                    </button>
+    
+                                </td>
+                            </tr>
+                        )
+                        })}
+                </tbody>
+            </table>
+        );
+    }
+
     return (
-        <div className="columns is-mobile is-multiline is-centered">
-            <div className="column is-7 has-background-light mt-5">
-                <div className="box has-text-centered has-background-light">
-                    <div className="columns is-centered is-multiline ">
-                        <div className="column is-6 ">
-                           <div className="columns is-multiline">
-                                <div className="column is-6-fullhd is-12">   
-                                    <label className="label has-text-success-dark"> Search </label> 
-                                    <div className="field has-addons">
-                                        <div className="control">
-                                            <input id="searchinput" className="input is-rounded" type="text" placeholder="Search"></input>   
+            <div className="columns is-mobile is-multiline">
+                <div className="column is-6 is-offset-3 mt-3">
+                    {(!state.positionsExist) ? <ViewNoproduct/> : <Table positions={state.positions}/>}
+                </div>
+                <div className="column is-4 is-offset-4 mt-3">
+                    <div className="columns">
+                        <div className="column"  style={{ display: state.editBox ? '' : 'none' }}>
+                            <div className="box has-text-centered has-background-light">
+                                <div className="field ">
+                                    <label className="label">Edit Position nr {id}</label>
+                                </div>
+                                <div className="field is-grouped">,
+                                    <form onSubmit={sendEdit}>
+                                        <input className="input" type="text" value={name} placeholder="Name" onChange={handleName}/>
+                                        <input className="input mt-3" type="text" placeholder="Description" onChange={handleDescription}/>
+                                        <div className="select is-multiple is-small is-left mt-3" onChange={handleProgrammingLanguage}>
+                                            <select multiple  size="4">
+                                                <option value="C_PLUS_PLUS">C++</option>
+                                                <option value="C_SHARP">C#</option>
+                                                <option value="JAVA">Java</option>
+                                                <option value="PYTHON">Python</option>
+                                            </select>
                                         </div>
-                                            <button className="button is-primary">
-                                            <span className="icon">
-                                                <i className="fas fa-search"></i>
-                                            </span></button> 
-                                    </div>  
-                                </div>                       
-                                <div className="column is-6">       
-                                    <label className="label has-text-success-dark" htmlFor="Sorting"> Sort by </label>    
-                                    <div className="select is-rounded is-primary"> 
-                                        <select defaultValue="NameAZ" name="sort by" id="Sorting">                                          
-                                            <option value="NameAZ">Name Ascending</option>
-                                            <option value="NameZA">Name Descending</option>
-                                            <option value="NameAZ">Postion Ascending</option>
-                                            <option value="NameZA">Postion Descending</option>
-                                        </select> 
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                        <div className="column is-6">
-                            <div className="columns is-multiline">
-                                <div className="column">
-                                    <label className="label has-text-success-dark">Page 1/1</label>
-                                    <button className="button is-rounded is-primary is-outlined has-background-white has-text-black" disabled>Previous Page</button>
-                                    <button className="button is-rounded is-primary is-outlined has-background-white has-text-black" disabled>Next Page</button>
-                                </div>
-                                <div className="column is-narrow-fullhd is-12">
-                                    <label className="label has-text-success-dark" htmlFor="Number">Results</label>
-                                    <div className="select is-rounded is-primary">
-                                        <select defaultValue="10" style={{width:'100%'}} name="Number" id="Number">
-                                            <option value="5">5</option>
-                                            <option value="10">10</option>
-                                            <option value="15">15</option>
-                                            <option value="20">20</option>
-                                        </select> 
-                                    </div>
+                                        <button className="button is-danger is-rounded ml-6 mt-6 mr-5"
+                                        onClick = {() => {setState({positionsExist: state.positionsExist, positions: state.positions, editedProductId: state.editedProductId, editBox: false})}}>
+                                            <span className="icon is-big">
+                                                <i className="fas fa-times-circle" />
+                                            </span>
+                                            <span>Cancel</span>
+                                        </button>
+                                        <button className="button is-primary is-rounded mt-6 ml-5" type="submit">
+                                            <span className="icon is-big">
+                                                <i className="fas fa-edit" />
+                                            </span>
+                                            <span>Submit Description</span>
+                                        </button>
+                                        </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="column is-6 mt-3">
-                {(!state.positionsExist) ? <ViewNoproduct/> : <Table positions={state.positions}/>}
-            </div>
-        </div>
+            
     );
 
 }
@@ -127,46 +204,3 @@ function ViewNoproduct() {
     );
 }
 
-function Table({positions}) {
-    const navigate = useNavigate();
-    return (
-        <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered" >
-            <thead>
-                <tr className="is-uppercase has-background-light">
-                    <th  className="is-vcentered">ID</th>
-                    <th  className="is-vcentered">Name</th>
-                    <th  className="is-vcentered">Description</th>
-                    <th  className="is-vcentered">Languagues</th>
-                    <th  className="is-vcentered">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {positions.map((list,index) =>{ 
-                    return(
-                        <tr key={index}>
-                            <td  className="is-vcentered">{list.id}</td>
-                            <td  className="is-vcentered">{list.name}</td>
-                            <td  className="is-vcentered">{list.description}</td>
-                            <td  className="is-vcentered">{RequiredLanguage(list.programmingLanguages)}</td>
-                            <td  className="is-vcentered">
-                                <button className="button is-small is-danger">
-                                    <span className="icon is-small">
-                                        <i className="fas fa-trash"/>
-                                    </span>
-                                    <span>Delete</span>
-                                </button>
-                                <button className="button is-small is-warning">
-                                    <span className="icon is-small">
-                                        <i className="fas fa-cogs"/>
-                                    </span>
-                                    <span>Edit</span>
-                                </button>
-
-                            </td>
-                        </tr>
-                    )
-                    })}
-            </tbody>
-        </table>
-    );
-}

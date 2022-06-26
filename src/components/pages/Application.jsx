@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { getAuthHeader, getAdminHeader } from '../../storedData';
+import { getAuthHeader, isAdmin } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
@@ -55,12 +55,13 @@ export default function Application() {
 
     const sendEdit = (e) => {
         e.preventDefault();
-        Axios.put(API_URL + "/applications/" + id, {
+        const data = {
+            positionId: positionId,
+            description: document.getElementById("descriptionText").value
+        };
+        
+        Axios.put(API_URL + "/applications/" + id, data,{
             headers: getAuthHeader(),
-            data: {
-                positionId: positionId,
-                description: document.getElementById("descriptionText").value
-            }
         })
         .then((response) => {
             console.log(response);
@@ -95,7 +96,7 @@ export default function Application() {
         console.log(documentList.documentList)
         if (documentList.documentList.length == 0){
             return(
-                <div className="is-size-6 has-text-justified">"Submitted documents: No available documents"</div>
+                <div className="is-size-6 has-text-justified">Submitted documents: No available documents</div>
             )
         }else if (documentList.documentList.length == 1){
             return(
@@ -181,8 +182,8 @@ export default function Application() {
                         <div className="is-size-6 has-text-justified my-2">
                                 {<ShowDocuments documentList={documents}/>}
                         </div>
-                        <div className="columns is-size-6 has-text-justified">
-                            <div className = "column is-6 has-text-centered">
+                        <div className="columns is-size-6 has-text-justified mt-3">
+                            <div className = "column is-6 has-text-centered" style={{ display: isAdmin() ? 'none' : '' }}>
                                 <button
                                     className="button is-big is-warning is-rounded"
                                     onClick = {() => {setEditBox(true)}}>
@@ -192,7 +193,7 @@ export default function Application() {
                                         <span>Edit application decription</span>
                                     </button>
                             </div>
-                            <div className = "column is-6 has-text-centered">
+                            <div className = "column is-6 has-text-centered" style={{ display: isAdmin() ? '' : 'none' }}>
                                 <button
                                     className="button is-big is-success is-rounded">
                                         <span className="icon is-big">

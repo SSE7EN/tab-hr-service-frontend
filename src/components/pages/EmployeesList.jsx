@@ -56,7 +56,7 @@ function Table({employee}) {
                     <th  className="is-vcentered">Name</th>
                     <th  className="is-vcentered">Created</th>
                     <th  className="is-vcentered">Role</th>
-                    <th  className="is-vcentered">Actions</th>
+                    {/*<th  className="is-vcentered">Actions</th>*/}
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +67,7 @@ function Table({employee}) {
                             <td  className="is-vcentered">{list.firstName + " " + list.lastName}</td>
                             <td  className="is-vcentered">{list.createdOn}</td>
                             <td  className="is-vcentered">{list.role}</td>
-                            <td  className="is-vcentered">
+                            {/*<td  className="is-vcentered">
                                 <button className="button is-small is-danger">
                                     <span className="icon is-small">
                                         <i className="fas fa-trash"/>
@@ -75,7 +75,7 @@ function Table({employee}) {
                                     <span>Block</span>
                                 </button>
 
-                            </td>
+                            </td>*/}
                         </tr>
                     )
                     })}
