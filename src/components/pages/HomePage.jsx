@@ -53,6 +53,8 @@ export default function HomePage() {
                 <br/>
                 If you are signed in already you'll be rediected to job aplication form which you must fill with required data. <br/>
                 If you are <strong>NOT</strong> signed in already you'll be rediected to login form. After logging in you'll redirected back to home page and able to apply for a job. <br/>
+                <br/>
+                To hide this message click <strong> Help </strong> button.
             </div>
         );
     }

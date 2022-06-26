@@ -119,7 +119,9 @@ export default function Apply() {
 				To apply you must upload your CV using <strong> upload CV </strong> button. <br/>
 				Additionally you can send your motivation letter using <strong> upload Motivational Letter </strong> button. <br/>
 				<br/>
-				After you filled all required information and uploaded required documents you can finish application by clicking <strong> Apply </strong> button.
+				After you filled all required information and uploaded required documents you can finish application by clicking <strong> Apply </strong> button. <br/>
+				<br/>
+				To hide this message click <strong> Help </strong> button.
             </div>
         );
     }
