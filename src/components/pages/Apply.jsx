@@ -23,6 +23,7 @@ export default function Apply() {
 	const[positionLanguages, setPositionLanguages] = useState([]);
 
 	const [registered, setRegistered] = useState(false);
+	const [showHelp, setShowHelp] = useState(false);
 
 	const [error, setError] = useState();
 
@@ -98,6 +99,30 @@ export default function Apply() {
 		}
 
     };
+
+	function ShowHelp() {
+        if(showHelp == true)
+            setShowHelp(false);
+        else
+            setShowHelp(true);
+    }
+
+    function ShowHelpMessage()
+    {
+        return (
+            <div className="notification is-success is-light">
+                This is Application form, you can use it to send all information about you and documents required to start application process.<br/>
+                <br/>
+                On the left side you can see info about job you are applying right now - it's name, description and required knowledge. <br/>
+                <br/>
+                On the right side there is form you must fill in. Your email and name will be filled automatically with information you provided during registration. You can change these if you wish to <br/>
+				To apply you must upload your CV using <strong> upload CV </strong> button. <br/>
+				Additionally you can send your motivation letter using <strong> upload Motivational Letter </strong> button. <br/>
+				<br/>
+				After you filled all required information and uploaded required documents you can finish application by clicking <strong> Apply </strong> button.
+            </div>
+        );
+    }
 
 	const successfullRegister = () => {
 		return (
@@ -220,87 +245,106 @@ export default function Apply() {
 	}
 
 	return (
-		<div className="columns is-centered">
-			<div className="column is-half-tablet is-one-third-widescreen mr-6 mt-6">
-				<div className="box has-text-centered has-background-light">
-						<div className="is-size-3 has-text-centered">
-							Position name: {positionName}<br /><br />
-						</div>
-						<div className="is-size-6 has-text-justified">
-							Position description: {positionDescription}<br /><br /><br />
-						</div>
-						<div className="columns is-size-5">
-							<div className="column">
-								Required knowledge of: {(<RequiredLanguage languagearray={positionLanguages}/>)}
+		<div>
+			<div className="columns is-centered">
+                <div className="column is-full">
+					{showHelp && ShowHelpMessage()}
+                </div>
+			</div>
+			<div className="columns is-centered">
+				<div className="column is-half-tablet is-one-third-widescreen mr-6 mt-6">
+					<div className="box has-text-centered has-background-light">
+							<div className="is-size-3 has-text-centered">
+								Position name: {positionName}<br /><br />
 							</div>
+							<div className="is-size-6 has-text-justified">
+								Position description: {positionDescription}<br /><br /><br />
+							</div>
+							<div className="columns is-size-5">
+								<div className="column">
+									Required knowledge of: {(<RequiredLanguage languagearray={positionLanguages}/>)}
+								</div>
+							</div>
+					</div>
+				</div>
+				<div className="column is-half-tablet is-one-third-widescreen ml-6 mt-6">
+					<div className="box has-text-centered has-background-light">
+						<div>
+							<label className="label">Canditate Application Form</label>
 						</div>
+						<div className="field">
+							{registered && successfullRegister()}
+						</div>
+						<form onSubmit={handleSubmit}>
+							<div className="field">
+								<p className="control has-icons-left">
+									<input className="input" onChange={handleEmail} value={emailCan} type="email" placeholder="E-mail" />
+									<span className="icon is-small is-left">
+										<i className="fas fa-envelope" />
+									</span>
+								</p>
+							</div>
+							<div className="field">
+								<p className="control has-icons-left">
+									<input className="input" onChange={handleFirstName} value={firstNameCan} type="text" placeholder="First Name" />
+									<span className="icon is-small is-left">
+										<i className="fas fa-id-card-alt" />
+									</span>
+								</p>
+							</div>
+							<div className="field">
+								<p className="control has-icons-left">
+									<input className="input" onChange={handleLastName} value={lastNameCan} type="text" placeholder="Last Name" />
+									<span className="icon is-small is-left">
+										<i className="fas fa-id-card-alt" />
+									</span>
+								</p>
+							</div>
+							<div className="field is-grouped is-grouped-centered mt-4">
+								<div className="file is-boxed">
+									<label className="file-label mx-4">
+										<input className="file-input" onChange={handleCV} type="file" multiple/>
+										<span className="file-cta">
+											<span className="file-icon">
+												<i className="fas fa-upload" />
+											</span>
+											<span className="file-label">
+												Upload CV
+											</span>
+										</span>
+									</label>
+								</div>
+								<div className="file is-boxed">
+									<label className="file-label mx-4">
+										<input className="file-input" onChange={handleML} type="file" multiple/>
+										<span className="file-cta">
+											<span className="file-icon">
+												<i className="fas fa-upload" />
+											</span>
+											<span className="file-label">
+												Upload Motivational Letter
+											</span>
+										</span>
+									</label>
+								</div>
+							</div>
+							<button className="button is-primary">Apply</button>
+						</form>
+					</div>
 				</div>
 			</div>
-			<div className="column is-half-tablet is-one-third-widescreen ml-6 mt-6">
-				<div className="box has-text-centered has-background-light">
-					<div>
-						<label className="label">Canditate Application Form</label>
-					</div>
-					<div className="field">
-						{registered && successfullRegister()}
-					</div>
-					<form onSubmit={handleSubmit}>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleEmail} value={emailCan} type="email" placeholder="E-mail" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-envelope" />
-								</span>
-							</p>
-						</div>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleFirstName} value={firstNameCan} type="text" placeholder="First Name" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-id-card-alt" />
-								</span>
-							</p>
-						</div>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleLastName} value={lastNameCan} type="text" placeholder="Last Name" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-id-card-alt" />
-								</span>
-							</p>
-						</div>
-                        <div className="field is-grouped is-grouped-centered mt-4">
-							<div className="file is-boxed">
-								<label className="file-label mx-4">
-									<input className="file-input" onChange={handleCV} type="file" multiple/>
-									<span className="file-cta">
-										<span className="file-icon">
-											<i className="fas fa-upload" />
-										</span>
-										<span className="file-label">
-											Upload CV
-										</span>
-									</span>
-								</label>
-							</div>
-							<div className="file is-boxed">
-								<label className="file-label mx-4">
-									<input className="file-input" onChange={handleML} type="file" multiple/>
-									<span className="file-cta">
-										<span className="file-icon">
-											<i className="fas fa-upload" />
-										</span>
-										<span className="file-label">
-											Upload Motivational Letter
-										</span>
-									</span>
-								</label>
-							</div>
-						</div>
-						<button className="button is-primary">Apply</button>
-					</form>
-				</div>
-			</div>
+			<div>
+                <div className="columns">
+                    <div className="column is-1 is-offset-10">
+                        <div className="button is-info" onClick={ShowHelp}>
+                            <span className="icon">
+                                <i className="far fa-question-circle"></i>
+                            </span>
+                            <span>help</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
 	);
 
