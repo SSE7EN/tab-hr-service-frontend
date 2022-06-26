@@ -52,7 +52,7 @@ export default function Login(){
                             <form onSubmit={getToken}>
                                 <input type="text" id="flogin" placeholder="Login" className="input"/>
                                 <input type="password" id="fpassword" placeholder="Password" className="input my-4"/>
-                                <button className="button is-primary">Login!</button>
+                                <button className="button is-rounded is-primary">Login!</button>
                             </form>
                         </div>
                         <div className="field">

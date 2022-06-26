@@ -49,6 +49,11 @@ export default function MeetingsList() {
         
     }, []);
 
+    
+    const displayTime = (time) =>{
+        return time.substring(0,10) + " " + time.substring(11,16);
+    }
+
     return (
         <div className="columns is-mobile is-multiline is-centered">
             <div className="column is-6 mt-3">
@@ -80,7 +85,7 @@ export default function MeetingsList() {
     }
 
     function Table({meetinngList}) {
-        console.log(meetinngList.length)
+        console.log(meetinngList)
         const navigate = useNavigate();
         if (meetinngList.length == 0){
             return(
@@ -119,7 +124,7 @@ export default function MeetingsList() {
                                 <tr key={index}>
                                     <td  className="is-vcentered">{list.id}</td>
                                     <td  className="is-vcentered">{list.meetingType}</td>
-                                    <td  className="is-vcentered">{list.dateTime}</td>
+                                    <td  className="is-vcentered">{displayTime(list.dateTime)}</td>
                                     <td  className="is-vcentered">{list.mainInterviewer.firstName + " " +list.mainInterviewer.lastName}</td>
                                     <td  className="is-vcentered">{list.candidate.user.firstName + " " +list.candidate.user.lastName}</td>
                                     <td  className="is-vcentered">

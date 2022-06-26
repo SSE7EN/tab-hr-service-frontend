@@ -81,7 +81,7 @@ export default function Position() {
                             <br/>
 
                             
-                            <button className="button is-primary my-2">Submit</button>
+                            <button className="button is-rounded is-primary my-2">Submit</button>
                         </form>
                     </div>
                 </div>

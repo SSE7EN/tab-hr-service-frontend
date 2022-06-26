@@ -78,7 +78,7 @@ export default function ApplicationSent(){
                             <label className="label">{(isError || state.error) ? "Error has occured while sending the application" : "Application sent successfully"}</label>
                         </div>
                         <div className="field">
-                            <button className="button is-light"
+                            <button className="button is-rounded is-light"
                                 onClick={() => {navigate("/", { replace: true }); }}>
                                 <span className="icon">
                                     <i className="fas fa-home"></i>

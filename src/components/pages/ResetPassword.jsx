@@ -103,7 +103,7 @@ export default function ResetPassword(){
 								</span>
 							</p>
 						</div>
-						<button className="button is-primary">Change Password</button>
+						<button className="button is-rounded is-primary">Change Password</button>
 					</form>
 				</div>
 			</div>

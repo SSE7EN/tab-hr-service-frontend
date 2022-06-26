@@ -8,16 +8,16 @@ import Axios from "axios";
 
 export default function Apply() {
 	const { id } = useParams();
+	const [userId, setUserId] = useState(0);
 	const [emailCan, setEmailCan] = useState('');
 	const [firstNameCan, setFirstNameCan] = useState('');
 	const [lastNameCan, setLastNameCan] = useState('');
     const [state, setState] = useState({selectedCVFile: null, selectedMLFile: null});
+	const [descriptionCan, setDescriptionCan] = useState("");
 
 	const[CV_ID,setCV_ID] = useState(-1);
 	const[ML_ID,setML_ID] = useState(-1);
-	const[applicationID, setApplicationID] = useState(0);
 
-	const[positionId, setPositionID] = useState(-1);
 	const[positionName, setPositionName] = useState('');
 	const[positionDescription, setPositionDescription] = useState('');
 	const[positionLanguages, setPositionLanguages] = useState([]);
@@ -29,6 +29,9 @@ export default function Apply() {
 
 	const navigate = useNavigate();
 
+	const handleDescription = (e) => {
+        setDescriptionCan(e.target.value);
+    };
 
 	const handleEmail = (e) => {
 		setEmailCan(e.target.value);
@@ -118,6 +121,7 @@ export default function Apply() {
                 On the right side there is form you must fill in. Your email and name will be filled automatically with information you provided during registration. You can change these if you wish to <br/>
 				To apply you must upload your CV using <strong> upload CV </strong> button. <br/>
 				Additionally you can send your motivation letter using <strong> upload Motivational Letter </strong> button. <br/>
+				You can also tell us somthing about you in <strong> Description </strong> field. <br/>
 				<br/>
 				After you filled all required information and uploaded required documents you can finish application by clicking <strong> Apply </strong> button. <br/>
 				<br/>
@@ -158,7 +162,6 @@ export default function Apply() {
             setError(false);
 
             // setting those here to fill inputs for update with default values
-            setPositionID(response.data.id);
             setPositionName(response.data.name);
             setPositionDescription(response.data.description);
             setPositionLanguages(response.data.programmingLanguages);
@@ -176,6 +179,7 @@ export default function Apply() {
             setError(false);
 
             // setting those here to fill inputs for update with default values
+			setUserId(response.data.id)
             setEmailCan(response.data.email);
             setFirstNameCan(response.data.firstName);
             setLastNameCan(response.data.lastName);
@@ -191,7 +195,7 @@ export default function Apply() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log(emailCan, firstNameCan, lastNameCan, positionId);
+		console.log(emailCan, firstNameCan, lastNameCan, id);
 		if (emailCan === '' || firstNameCan === '' || lastNameCan === '') {
 			console.log("Fill all inputs");
 		} else {
@@ -201,9 +205,9 @@ export default function Apply() {
 				method: 'post',
 				headers: getAuthHeader(),
 				data: {
-					id: 0,
-					positionId: 1,
-					description: ""
+					id: userId,
+					positionId: id,
+					description: descriptionCan
 				}
 			})
 			
@@ -253,7 +257,15 @@ export default function Apply() {
 					{showHelp && ShowHelpMessage()}
                 </div>
 			</div>
-			<div className="columns is-centered">
+			<div className="columns">
+				<div className="column is-1 is-offset-1 mt-6">
+					<div className="button is-rounded is-info" onClick={ShowHelp}>
+						<span className="icon">
+							<i className="far fa-question-circle"></i>
+						</span>
+						<span>help</span>
+					</div>
+				</div>
 				<div className="column is-half-tablet is-one-third-widescreen mr-6 mt-6">
 					<div className="box has-text-centered has-background-light">
 							<div className="is-size-3 has-text-centered">
@@ -302,6 +314,13 @@ export default function Apply() {
 									</span>
 								</p>
 							</div>
+							<textarea
+                                placeholder="Tell us something about you"
+                                name="description"
+                                className="textarea is-small my-2"
+                                defaultValue={descriptionCan}
+                                onChange={handleDescription}
+                            />
 							<div className="field is-grouped is-grouped-centered mt-4">
 								<div className="file is-boxed">
 									<label className="file-label mx-4">
@@ -330,23 +349,11 @@ export default function Apply() {
 									</label>
 								</div>
 							</div>
-							<button className="button is-primary">Apply</button>
+							<button className="button is-rounded is-primary">Apply</button>
 						</form>
 					</div>
 				</div>
 			</div>
-			<div>
-                <div className="columns">
-                    <div className="column is-1 is-offset-10">
-                        <div className="button is-info" onClick={ShowHelp}>
-                            <span className="icon">
-                                <i className="far fa-question-circle"></i>
-                            </span>
-                            <span>help</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 		</div>
 	);
 

@@ -131,7 +131,7 @@ export default function RegisterUser() {
 								</span>
 							</p>
 						</div>
-						<button className="button is-primary">Sign Up</button>
+						<button className="button is-primary is-rounded">Sign Up</button>
 					</form>
 				</div>
 			</div>
