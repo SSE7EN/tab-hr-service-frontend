@@ -20,6 +20,7 @@ export default function Application() {
 	const[positionDescription, setPositionDescription] = useState('');
 	const[positionLanguages, setPositionLanguages] = useState([]);
 
+    const[candidadateID, setCandidateId] = useState(0);
     const[candidateEmail, setCandidateEmail] = useState('');
     const[candidateName, setCandidateName] = useState('');
     const[applicationDescription, setapplicationDescription] = useState('');
@@ -41,6 +42,7 @@ export default function Application() {
             setPositionDescription(response.data.position.description);
             setPositionLanguages(response.data.position.programmingLanguages);
 
+            setCandidateId(response.data.candidate.user.id);
             setCandidateEmail(response.data.candidate.user.email);
             setCandidateName(response.data.candidate.user.firstName + " " + response.data.candidate.user.lastName);
             setapplicationDescription(response.data.description);
@@ -191,7 +193,8 @@ export default function Application() {
                         <div className="columns is-size-6 has-text-justified mt-3">
                             <div className = "column has-text-centered" style={{ display: isAdmin() ? '' : 'none' }}>
                                 <button
-                                    className="button is-big is-success is-rounded">
+                                    className="button is-big is-success is-rounded"
+                                    onClick={() => {navigate("/meeting",{state: {candidateID: candidadateID, candidateName: candidateName}}); }}>
                                         <span className="icon is-big">
                                             <i className="fas fa-check-circle" />
                                         </span>

@@ -5,8 +5,13 @@ export default function adminDropdown({ user }) {
     return (
         <div className="navbar-brand">
             <div className="navbar-item has-dropdown is-hoverable ">
-                <div className="navbar-link has-background-primary-light">
-                    {user.firstName || "Grzegorz"} {user.lastName || "Brzęczyszczykiewicz"}
+                <div className="navbar-link has-background-primary-light px-8">
+                <span className="icon is-small is-left mx-3">
+                    <i className="fas fa-user" />
+                </span>
+                <span>
+                    {user.firstName || "null"} {user.lastName || "null"}
+                </span>
                 </div>
                 <div className="navbar-dropdown is-boxed has-background-primary-light">
                     <div className="navbar-item is-size-7 my-0 py-0">
@@ -21,6 +26,7 @@ export default function adminDropdown({ user }) {
                     <NavLink to="/employeeslist">Employees List</NavLink>
                     <NavLink to="/positionlist">Positions List</NavLink>
                     <NavLink to="/position">Create Position</NavLink>
+                    <NavLink to="/meetings">Your Meetings</NavLink>
                     <NavLink to="/report">Report</NavLink>
                     <NavLink to="/logout">Logout</NavLink>
                 </div>

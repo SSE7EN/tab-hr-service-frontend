@@ -67,15 +67,13 @@ export default function HomePage() {
                 </div>
 			</div>
             <div className="columns is-centered">
-                <div className="column is-size-1 mt-5 has-text-centered mt-2">
-                    <p>
+                <div className="column is-size-2 mt-5 has-text-centered">
                     <span className="icon-text ">
                         <span className="icon ml-10 mr-5">
                             <i className="fas fa-home"></i>
                         </span>
                         <span>Welcome to the [GENERIC_COMPANY_NAME] company</span>
                     </span>
-                    </p>
                 </div>
             </div>
             {(!state.positionsExist) ? <NoPostions/> : <PositionBoxes positions={availablePositions}/>}
