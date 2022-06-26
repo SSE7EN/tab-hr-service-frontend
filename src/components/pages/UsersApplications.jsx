@@ -95,7 +95,6 @@ function Table({appicationList}) {
                 <thead>
                     <tr className="is-uppercase has-background-light">
                         <th  className="is-vcentered">ID</th>
-                        <th  className="is-vcentered">description</th>
                         <th  className="is-vcentered">position name</th>
                         <th  className="is-vcentered">position description</th>
                         <th  className="is-vcentered">position languagues</th>
@@ -107,7 +106,6 @@ function Table({appicationList}) {
                         return(
                             <tr key={index}>
                                 <td  className="is-vcentered">{list.id}</td>
-                                <td  className="is-vcentered">{list.description}</td>
                                 <td  className="is-vcentered">{list.position.name}</td>
                                 <td  className="is-vcentered">{list.position.description}</td>
                                 <td  className="is-vcentered">{(<RequiredLanguage languagearray={list.position.programmingLanguages}/>)}</td>

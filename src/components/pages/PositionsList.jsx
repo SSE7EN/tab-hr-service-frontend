@@ -51,7 +51,7 @@ export default function PositionsList() {
     };
 
     useEffect(() => {
-        Axios.get(API_URL + '/positions', {
+        Axios.get(API_URL + '/positions?sort=id', {
             headers: getAuthHeader(),
             method: "get",
         })
@@ -65,16 +65,18 @@ export default function PositionsList() {
     const sendEdit = (e) => {
         e.preventDefault();
         
-        Axios.put(API_URL + "/positions/" + id, {
-            headers: getAuthHeader(),
-            data: {
-                name: name,
+        const data = {
+            name: name,
                 description: description,
                 programmingLanguages: languages
-            }
+        }
+
+        Axios.put(API_URL + "/positions/" + id, data,{
+            headers: getAuthHeader(),
         })
         .then((response) => {
             console.log(response);
+            window.location.reload(false);
         })
         .catch(error => {
             console.log(error);

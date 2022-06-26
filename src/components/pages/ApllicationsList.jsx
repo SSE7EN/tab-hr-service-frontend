@@ -24,7 +24,7 @@ export default function ApllicationsList() {
     };
 
     useEffect(() => {
-        Axios(API_URL + '/applications', {
+        Axios(API_URL + '/applications?sort=id', {
             headers: getAuthHeader(),
             method: "get",
         })

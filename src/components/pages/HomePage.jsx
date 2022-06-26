@@ -66,8 +66,16 @@ export default function HomePage() {
 					{showHelp && ShowHelpMessage()}
                 </div>
 			</div>
-            <div className="columns is-centered">
-                <div className="column is-size-2 mt-5 has-text-centered">
+            <div className="columns">
+                    <div className="column is-1 is-offset-1 mt-4">
+                        <div className="button is-rounded is-info" onClick={ShowHelp}>
+                            <span className="icon">
+                                <i className="far fa-question-circle"></i>
+                            </span>
+                            <span>help</span>
+                        </div>
+                    </div>
+                <div className="column is-6 is-offset-1 is-size-3 mt-5 has-text-centered">
                     <span className="icon-text ">
                         <span className="icon ml-10 mr-5">
                             <i className="fas fa-home"></i>
@@ -77,18 +85,6 @@ export default function HomePage() {
                 </div>
             </div>
             {(!state.positionsExist) ? <NoPostions/> : <PositionBoxes positions={availablePositions}/>}
-            <div>
-                <div className="columns">
-                    <div className="column is-1 is-offset-10">
-                        <div className="button is-info" onClick={ShowHelp}>
-                            <span className="icon">
-                                <i className="far fa-question-circle"></i>
-                            </span>
-                            <span>help</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         
         
@@ -151,7 +147,7 @@ function PositionBoxes({positions}) {
                                     </div>
                                 </div>
                                 <div className="column is-narrow py-1">
-                                    <button className="button is-primary" onClick={() => {isNaN(getCurrentUserId()) ? navigate("/login", { replace: true }) :  navigate(("/apply/" + list.id), { replace: true })}} /*fix this thing*/>
+                                    <button className="button is-rounded is-primary" onClick={() => {isNaN(getCurrentUserId()) ? navigate("/login", { replace: true }) :  navigate(("/apply/" + list.id), { replace: true })}} /*fix this thing*/>
                                             <span className="icon">
                                                 <i className="fas fa-paper-plane"></i>
                                             </span>

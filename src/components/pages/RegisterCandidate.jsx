@@ -130,7 +130,7 @@ export default function RegisterCandidate() {
 								</span>
 							</p>
 						</div>
-						<button className="button is-primary">Sign Up</button>
+						<button className="button is-rounded is-primary">Sign Up</button>
 						<div className="field">
                             <NavLink to="/login">Already have an account? Login</NavLink>
                         </div>

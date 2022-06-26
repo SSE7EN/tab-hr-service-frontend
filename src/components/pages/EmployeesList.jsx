@@ -24,7 +24,7 @@ export default function EmployeesList() {
     };
 
     useEffect(() => {
-        Axios.get(API_URL + '/users', {
+        Axios.get(API_URL + '/users?sort=id', {
             headers: getAuthHeader(),
             method: "get",
         })
@@ -35,6 +35,48 @@ export default function EmployeesList() {
         .catch(handleError);
     }, []);
 
+    const displayTime = (time) =>{
+        if (time != null){
+            return time.substring(0,10) + " " + time.substring(11,16);
+        }
+    }
+
+    const Table = ({employee})=>  {
+        return (
+            <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered" >
+                <thead>
+                    <tr className="is-uppercase has-background-light">
+                        <th  className="is-vcentered">ID</th>
+                        <th  className="is-vcentered">Name</th>
+                        <th  className="is-vcentered">Created</th>
+                        <th  className="is-vcentered">Role</th>
+                        {/*<th  className="is-vcentered">Actions</th>*/}
+                    </tr>
+                </thead>
+                <tbody>
+                    {employee.map((list,index) =>{ 
+                        return(
+                            <tr key={index}>
+                                <td  className="is-vcentered">{list.id}</td>
+                                <td  className="is-vcentered">{list.firstName + " " + list.lastName}</td>
+                                <td  className="is-vcentered">{displayTime(list.createdOn)}</td>
+                                <td  className="is-vcentered">{list.role}</td>
+                                {/*<td  className="is-vcentered">
+                                    <button className="button is-rounded is-small is-danger">
+                                        <span className="icon is-small">
+                                            <i className="fas fa-trash"/>
+                                        </span>
+                                        <span>Block</span>
+                                    </button>
+
+                                </td>*/}
+                            </tr>
+                        )
+                        })}
+                </tbody>
+            </table>
+        );
+    }
 
     return (
         <div className="columns is-mobile is-multiline is-centered">
@@ -42,44 +84,8 @@ export default function EmployeesList() {
                 {<Table employee={state.employee}/>}
             </div>
         </div>
-    );
-
-}
+    )
 
 
-function Table({employee}) {
-    return (
-        <table className="table is-striped is-bordered is-narrow is-hoverable is-fullwidth has-text-centered" >
-            <thead>
-                <tr className="is-uppercase has-background-light">
-                    <th  className="is-vcentered">ID</th>
-                    <th  className="is-vcentered">Name</th>
-                    <th  className="is-vcentered">Created</th>
-                    <th  className="is-vcentered">Role</th>
-                    {/*<th  className="is-vcentered">Actions</th>*/}
-                </tr>
-            </thead>
-            <tbody>
-                {employee.map((list,index) =>{ 
-                    return(
-                        <tr key={index}>
-                            <td  className="is-vcentered">{list.id}</td>
-                            <td  className="is-vcentered">{list.firstName + " " + list.lastName}</td>
-                            <td  className="is-vcentered">{list.createdOn}</td>
-                            <td  className="is-vcentered">{list.role}</td>
-                            {/*<td  className="is-vcentered">
-                                <button className="button is-small is-danger">
-                                    <span className="icon is-small">
-                                        <i className="fas fa-trash"/>
-                                    </span>
-                                    <span>Block</span>
-                                </button>
 
-                            </td>*/}
-                        </tr>
-                    )
-                    })}
-            </tbody>
-        </table>
-    );
 }

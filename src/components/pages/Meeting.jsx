@@ -7,21 +7,23 @@ import { getAuthHeader, getCurrentUserId } from '../../storedData';
 import {useLocation} from 'react-router-dom';
 export default function Meeting() {
     const location = useLocation();
-    const [state, setState] = useState({employee: []});
+    const [state, setState] = useState({allUsers: []});
 
     const [MainInterviewerIdCan, setMainInterviewerIdCan] = useState(1);
     const [CandidateIdCan, setCandidateIdCan] = useState(1);
     const [InterviewerIdsCan, setInterviewerIdsCan] = useState([]);
-    const [MeetingTypeCan, setMeetingTypeCan] = useState('Introduction');
+    const [MeetingTypeCan, setMeetingTypeCan] = useState('INTRODUCTION');
     const [DateTimeCan, setDateTimeCan] = useState('');
 
+    const [fillInputs, setfillInputs] = useState(false);
+    const [meetingCreated, setMeetingCreated] = useState(false);
     const [DateCan, setDateCan] = useState();
     const [TimeCan, setTimeCan] = useState();
 
     const navigate = useNavigate();
 
     const handleMainInterviewerId = (e) => {
-        setMainInterviewerIdCan(e.target.value);
+        setMainInterviewerIdCan(parseInt(e.target.selectedOptions[0].id));
     };
 
     const handleInterviewerIds = (event) => {
@@ -37,7 +39,7 @@ export default function Meeting() {
     };
 
     const handleDateTime = (e) => {
-        setDateTimeCan(DateCan+"T"+TimeCan);
+        setDateTimeCan(DateCan+"T"+TimeCan+":50.913664+02:00");
     };
 
     const handleDate = (e) => {
@@ -64,51 +66,81 @@ export default function Meeting() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (MainInterviewerIdCan === '' || MeetingTypeCan === '' || DateTimeCan === '') {
-			console.log("Fill all inputs");
+			setfillInputs(true);
 		} else {
-            console.log(MainInterviewerIdCan,CandidateIdCan,InterviewerIdsCan,MeetingTypeCan,DateTimeCan)
+            setfillInputs(false);
             Axios(API_URL + "/meetings", {
                 headers: getAuthHeader(),
                 method: "post",
                 data: {
                     mainInterviewerId: MainInterviewerIdCan,
                     candidateId: CandidateIdCan,
-                    interviewerIds: InterviewerIdsCan,
+                    interviewersIds: InterviewerIdsCan,
                     meetingType: MeetingTypeCan,
                     dateTime: DateTimeCan,
                 },
             })
             .then((response) => {
                 console.log(response);
+                setMeetingCreated(true);
             })
             
 		}
     };
 
     useEffect(() => {
-        setCandidateIdCan(location.state.candidateID)
         console.log(location.state.candidateID);
-        Axios.get(API_URL + '/users', {
+        Axios.get(API_URL + '/users?sort=id', {
             headers: getAuthHeader(),
             method: "get",
         })
         .then((response) => {
             console.log(response.data.content)
-            setState({employee:response.data.content});
+            setState({allUsers:response.data.content});
+        })
+        .catch(handleError);
+
+        Axios.get(API_URL + '/candidates?sort=id', {
+            headers: getAuthHeader(),
+            method: "get",
+        })
+        .then((response) => {
+            console.log(response.data.content)
+            getCandidate(response.data.content,location.state.candidateID);
         })
         .catch(handleError);
     }, []);
 
-    function getCandidate(_id){
+    const successfullmeeting = () => {
+		return (
+			<div className="notification is-success">
+				<label className="label">Meeting Created Succesfully</label>
+			</div>
+		);
+	};
 
+    const fillAllInputs = () => {
+		return (
+			<div className="notification is-warning">
+				<label className="label">Fill all Inputs</label>
+			</div>
+		);
+	};
+
+    const getCandidate = (candidats, _id) =>{
+        candidats.filter(candidats => candidats.user.id == _id).map(filteredCandidated =>{
+            setCandidateIdCan(filteredCandidated.id);
+        })
     }
-
 
     return (
         <div>
-            {console.log(state.employee)}
             <div className="columns is-centered">
                 <div className="column is-half-tablet is-one-third-widescreen mt-6">
+                    <div className="field has-text-centered">
+                        {fillInputs && fillAllInputs()}
+                        {meetingCreated && successfullmeeting()}
+                    </div>
                     <div className="box has-text-centered has-background-light">
                         <div className="has-text-centered is-size-3 mb-4">Position Form</div>
                         <form onSubmit={handleSubmit}>
@@ -117,9 +149,9 @@ export default function Meeting() {
                                 <div className="select is-small is-left" onChange={handleMainInterviewerId}>
                                 <select size="1">
                                 {
-                                state.employee.filter(employee => employee.role == 'ADMIN').map(filteredEmployee =>( 
-                                    <option value={state.employee.id}>
-                                    {filteredEmployee.firstName + " " + filteredEmployee.lastName}
+                                state.allUsers.filter(allUsers => allUsers.role == 'ADMIN').map(filteredAllUsers =>( 
+                                    <option id ={filteredAllUsers.id} value={state.allUsers.id}>
+                                    {filteredAllUsers.firstName + " " + filteredAllUsers.lastName}
                                     </option>
                                     ))}
                                 </select>
@@ -133,9 +165,9 @@ export default function Meeting() {
                                 <div className="select is-multiple is-small is-left" onChange={handleInterviewerIds}>
                                     <select multiple size="3">
                                     {
-                                    state.employee.filter(employee => employee.role == 'ADMIN').map(filteredEmployee =>( 
-                                            <option id={filteredEmployee.id} value={state.employee.id}>
-                                            {filteredEmployee.firstName + " " + filteredEmployee.lastName}
+                                    state.allUsers.filter(allUsers => allUsers.role == 'ADMIN').map(filteredAllUsers =>( 
+                                            <option id={filteredAllUsers.id} value={state.allUsers.id}>
+                                            {filteredAllUsers.firstName + " " + filteredAllUsers.lastName}
                                             </option>
                                         ))}
                                     </select>
@@ -162,7 +194,7 @@ export default function Meeting() {
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <button className="button is-primary my-2">Submit</button>
+                                <button className="button is-rounded is-primary my-2">Submit</button>
                             </div>
                         </form>
                     </div>
