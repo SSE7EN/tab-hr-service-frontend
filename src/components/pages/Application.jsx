@@ -95,20 +95,22 @@ export default function Application() {
         console.log(documentList.documentList)
         if (documentList.documentList.length == 0){
             return(
-                <div>"No available documents"</div>
+                <div className="is-size-6 has-text-justified">"Submitted documents: No available documents"</div>
             )
         }else if (documentList.documentList.length == 1){
             return(
-                <div>
-                    <NavLink to={"/document/" + documentList.documentList[0].id} >{documentList.documentList[0].documentType}</NavLink>
+                <div className="is-size-6 has-text-justified">
+                    Submitted documents:&nbsp;
+                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank">{documentList.documentList[0].documentType}</Link>
                 </div>
             )
         }
         else{
             return(
-                <div>
-                    <NavLink to={"/document/" + documentList.documentList[0].id} >{documentList.documentList[0].documentType}</NavLink>
-                    <NavLink to={"/document/" + documentList.documentList[1].id} >{documentList.documentList[1].documentType}</NavLink>
+                <div className="is-size-6 has-text-justified">
+                    Submitted documents:&nbsp;
+                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[0].documentType}</Link>,&nbsp;
+                    <Link to={"/document/" + documentList.documentList[1].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[1].documentType}</Link>
                 </div>
             ) 
         }
@@ -167,17 +169,17 @@ export default function Application() {
                         <div className="is-size-6 has-text-centered mb-5">
                             <label className="label">Canditate Info</label>
                         </div>
-                        <div className="is-size-6 has-text-justified">
-                                Email: {candidateEmail}<br /><br /><br />
+                        <div className="is-size-6 has-text-justified my-2">
+                                Email: {candidateEmail}
                         </div>
-                        <div className="is-size-6 has-text-justified">
-                                Name: {candidateName}<br /><br /><br />
+                        <div className="is-size-6 has-text-justified my-2">
+                                Name: {candidateName}
                         </div>
-                        <div className="is-size-6 has-text-justified">
-                                Application Description: {applicationDescription}<br /><br /><br />
+                        <div className="is-size-6 has-text-justified my-2">
+                                Application Description: {applicationDescription}
                         </div>
-                        <div className="is-size-6 has-text-justified">
-                                Submitted documents: {<ShowDocuments documentList={documents}/>}<br /><br /><br />
+                        <div className="is-size-6 has-text-justified my-2">
+                                {<ShowDocuments documentList={documents}/>}
                         </div>
                         <div className="columns is-size-6 has-text-justified">
                             <div className = "column is-6 has-text-centered">

@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs  } from 'react-pdf';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { getAuthHeader, getAdminHeader } from '../../storedData';
@@ -11,6 +11,11 @@ import Axios from "axios";
 
 export default function ShowDocument() {
     const { id } = useParams();
+
+    pdfjs.GlobalWorkerOptions.workerSrc = 
+    `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+    const url_pdf = "http://www.pdf995.com/samples/pdf.pdf";
 
     const [state, setState] = useState({Pages: 1, Page: 1})
 
@@ -55,7 +60,7 @@ export default function ShowDocument() {
             <div className = "column is-8 is-offset-2 has-text-centered">
                 <div className="box">
                     {documentType}
-                    <Document file={API_URL + "/" + documentURL} onLoadSuccess={onDocumentLoadSuccess} >
+                    <Document file={/*"http://localhost:8080/" + documentURL*/{ url: "http://localhost:8080/" + documentURL, httpHeaders: {...getAuthHeader()}}} onLoadSuccess={onDocumentLoadSuccess} >
                         <Page pageNumber={state.Page} />
                     </Document>
                     Page {state.Page} of {state.Pages}

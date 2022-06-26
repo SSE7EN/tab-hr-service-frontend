@@ -16,6 +16,7 @@ export default function LoggedUserDropdown({ user }) {
                         Your E-mail is <strong className="ml-1">{user.email || "missing"}</strong>
                     </div>
                     <hr className="navbar-divider has-background-dark mt-1 mb-0"/>
+                    <NavLink to="/userapplications">Your Applications</NavLink>
                     <NavLink to="/logout">Logout</NavLink>
                 </div>
             </div>

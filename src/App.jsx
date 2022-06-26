@@ -16,6 +16,7 @@ import RegisterCandidate from './components/pages/RegisterCandidate.jsx';
 import PositionsList from './components/pages/PositionsList.jsx';
 import ApplicationSent from './components/pages/ApplicationSent.jsx';
 import ShowDocument from './components/pages/ShowDocument.jsx';
+import UsersApplications from './components/pages/UsersApplications.jsx'
 
 
 
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/applicationsent" element={<ApplicationSent />} />
         <Route path="/document/:id" element={<ShowDocument />} />
+        <Route path="/userapplications" element={<UsersApplications />} />
     </Routes>
   </BrowserRouter>
   );
