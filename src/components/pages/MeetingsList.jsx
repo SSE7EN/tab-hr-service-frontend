@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config';
-import { getAuthHeader, getCurrentUserId, isAdmin } from '../../storedData';
+import { getAuthHeader, isAdmin } from '../../storedData';
 
 export default function MeetingsList() {
     const [state, setState] = useState({meetings: []});
@@ -25,7 +24,7 @@ export default function MeetingsList() {
 
     useEffect(() => {
         if (isAdmin()){
-            Axios(API_URL + '/meetings', {
+            Axios(API_URL + '/meetings?size=20', {
                 headers: getAuthHeader(),
                 method: "get",
             })

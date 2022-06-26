@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";

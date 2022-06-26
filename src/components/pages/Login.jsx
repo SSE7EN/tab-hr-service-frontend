@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { getAuthHeader, getAdminHeader } from '../../storedData';
+import { getAdminHeader }from '../../storedData';
 import API_URL from '../../config';
 import pubsub from '../../pubsub';
 

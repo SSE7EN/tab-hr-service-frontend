@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from "axios";
 import { useNavigate } from 'react-router';
 import API_URL from '../../config';
-import { getAuthHeader, getAdminHeader, getCurrentUserId } from '../../storedData';
+import { getCurrentUserId } from '../../storedData';
 
 export default function HomePage() {
     const [state,setState] = useState({positionsExist: false});
@@ -25,7 +25,7 @@ export default function HomePage() {
     };
 
     useEffect(() => {
-        Axios.get(API_URL + '/positions', {
+        Axios.get(API_URL + '/positions?size=20', {
             method: "get",
         })
         .then((response) => {

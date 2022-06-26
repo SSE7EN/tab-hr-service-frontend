@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Axios from "axios";
-import API_URL, { PHOTOS_URL } from "../../config";
+import API_URL from "../../config";
 import { getAuthHeader } from "../../storedData";
 export default function Position() {
     const [descriptionCan, setDescriptionCan] = useState("");
@@ -31,7 +31,7 @@ export default function Position() {
         if (descriptionCan === '' || nameCan === '' || ProgrammingLanguageCan === [null]) {
 			console.log("Fill all inputs");
 		} else {
-            Axios(API_URL + "/positions", {
+            Axios(API_URL + "/positions?size=20", {
                 headers: getAuthHeader(),
                 method: "post",
                 data: {

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router";
 import Axios from "axios";
 import API_URL from '../../config';
-import { getAuthHeader, getCurrentUserId } from '../../storedData';
+import { getAuthHeader } from '../../storedData';
 import {useLocation} from 'react-router-dom';
 export default function Meeting() {
     const location = useLocation();
@@ -69,7 +68,7 @@ export default function Meeting() {
 			setfillInputs(true);
 		} else {
             setfillInputs(false);
-            Axios(API_URL + "/meetings", {
+            Axios(API_URL + "/meetings?size=20", {
                 headers: getAuthHeader(),
                 method: "post",
                 data: {
