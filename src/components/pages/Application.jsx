@@ -1,169 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
 
-export default function Application() {
-	const { id } = useParams();
-	const [emailCan, setEmailCan] = useState('');
-	const [firstNameCan, setFirstNameCan] = useState('');
-	const [lastNameCan, setLastNameCan] = useState('');
-    const [appliedPosition, setAppliedPosition] = useState(0);
-    const [state, setState] = useState({selectedFile: null, filePreviev: ''});
+import sampleCV from '../pdf/testCV.pdf';
+import sampleletter from '../pdf/motivational_letter.pdf';
 
-	const[positionId, setPositionID] = useState(0);
+export default function Application() {
+    const { id } = useParams();
+
+    const [editBox, setEditBox] = useState(false);
+
+	const[positionId, setPositionID] = useState(-1);
 	const[positionName, setPositionName] = useState('');
 	const[positionDescription, setPositionDescription] = useState('');
 	const[positionLanguages, setPositionLanguages] = useState([]);
 
-	const [registered, setRegistered] = useState(false);
+    const[candidateEmail, setCandidateEmail] = useState('');
+    const[candidateName, setCandidateName] = useState('');
+    const[applicationDescription, setapplicationDescription] = useState('');
 
-	const [error, setError] = useState();
+    const[documents,setDocuments] = useState([])
+
+    const [error, setError] = useState();
 
 	const navigate = useNavigate();
 
-
-	const handleEmail = (e) => {
-		setEmailCan(e.target.value);
-	};
-
-	const handleFirstName = (e) => {
-		setFirstNameCan(e.target.value);
-	};
-
-	const handleLastName = (e) => {
-		setLastNameCan(e.target.value);
-	};
-
-    const handleAppliedPosition = (e) => {
-        setAppliedPosition(e.target.value);
-    };
-
-    const handleImages = (e) => {
-        if(e.target.files.length == 0) {
-            console.log("no files added");
-        }
-        else {
-			console.log("O",e.target.files);
-            console.log(e.target.files.length);
-            for(var i = 0; i < e.target.files.length; i++) {
-                console.log(e.target.files[i].name);
-            }
-			setState({selectedFile:e.target.files[0],filePreviev:URL.createObjectURL(e.target.files[0])});
-        }
-    };
-
-	const successfullRegister = () => {
-		return (
-			<div className="notification is-success">
-				<label className="label">User Registered Succesfully</label>
-			</div>
-		);
-	};
-
-	const handleError = (error) => {
-        console.log(error);
-        if(error.status === 401) {
-            navigate("/", { replace: true });
-        } else {
-        	setError({'message': {'type':'error', 'text':error.message}});
-        }
-    };
-
 	useEffect(() => {
-		Axios.get(API_URL + "/positions/" + id, {
+        Axios.get(API_URL + "/applications/" + id, {
             headers: getAuthHeader()
         })
         .then((response) => {
-            setError(false);
+            console.log(response);
+            setPositionID(response.data.position.id);
+            setPositionName(response.data.position.name);
+            setPositionDescription(response.data.position.description);
+            setPositionLanguages(response.data.position.programmingLanguages);
 
-            // setting those here to fill inputs for update with default values
-            setPositionID(response.data.id);
-            setPositionName(response.data.name);
-            setPositionDescription(response.data.description);
-            setPositionLanguages(response.data.programmingLanguages);
-			setAppliedPosition(response.data.id);
+            setCandidateEmail(response.data.candidate.user.email);
+            setCandidateName(response.data.candidate.user.firstName + " " + response.data.candidate.user.lastName);
+            setapplicationDescription(response.data.description);
 
+            setDocuments(response.data.documents)
         })
         .catch(error => {
             console.log(error);
-            setError(true);
         })
-
-		Axios.get(API_URL + "/users/current", {
-            headers: getAuthHeader()
-        })
-        .then((response) => {
-            setError(false);
-
-            // setting those here to fill inputs for update with default values
-            setEmailCan(response.data.email);
-            setFirstNameCan(response.data.firstName);
-            setLastNameCan(response.data.lastName);
-
-        })
-        .catch(error => {
-            console.log(error);
-            setError(true);
-        })
-        //hides that warning in console that makes me angry
-        // eslint-disable-next-line
+        
     }, []);
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log(emailCan, firstNameCan, lastNameCan, appliedPosition);
-		if (emailCan === '' || firstNameCan === '' || lastNameCan === '') {
-			console.log("Fill all inputs");
-		} else {
-			let file = state.selectedFile;
-			console.log("r",file);
+    const sendEdit = (e) => {
+        e.preventDefault();
+        Axios.put(API_URL + "/applications/" + id, {
+            headers: getAuthHeader(),
+            data: {
+                positionId: positionId,
+                description: document.getElementById("descriptionText").value
+            }
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
 
-			// const obj = {
-			// 	documentType: "CV",
-			// 	applicationId: 0
-			// }
-
-			// const json = JSON.stringify(obj);
-
-
-
-			// const data = new FormData();
-            // data.append('file', file); 
-			// data.append('dto', ('{"documentType": "CV", "applicationId": 0}', {contentType: 'application/json'}));
-
-			// data.append('dto',JSON.stringify({
-			// 	"id": 0,
-			// 	"documentType": "CV"                
-			// }));
-
-			// data.append('dto', new Blob([JSON.stringify({
-			// 	"id": 0,
-			// 	"documentType": "CV"                
-			// })]));
-			
-
-			Axios.post(API_URL + "/applications", {
-				headers: getAuthHeader(),
-				data: {
-					id: 0,
-					positionId: positionId,
-					description: "string"
-				}
-				//formData: data
-			})
-			
-				.then((response) => {
-					console.log(response)
-				})
-				.catch(handleError)
-		}
-	};
-
-	function RequiredLanguage(languagearray){
+    function RequiredLanguage(languagearray){
 		let languages = "";
 		var i =0;
 		for (i=0; i< languagearray.languagearray.length; i++){
@@ -184,77 +91,123 @@ export default function Application() {
 		return languages
 	}
 
-	return (
-		<div className="columns is-centered">
-			<div className="column is-half-tablet is-one-third-widescreen mr-6 mt-6">
-				<div className="box has-text-centered has-background-light">
-						<div className="is-size-3 has-text-centered">
-							Position name: {positionName}<br /><br />
-						</div>
-						<div className="is-size-6 has-text-justified">
-							Position description: {positionDescription}<br /><br /><br />
-						</div>
-						<div className="columns is-size-5">
-							<div className="column">
-								Required knowledge of: {(<RequiredLanguage languagearray={positionLanguages}/>)}
-							</div>
-						</div>
-				</div>
-			</div>
-			<div className="column is-half-tablet is-one-third-widescreen ml-6 mt-6">
-				<div className="box has-text-centered has-background-light">
-					<div>
-						<label className="label">Canditate Application Form</label>
-					</div>
-					<div className="field">
-						{registered && successfullRegister()}
-					</div>
-					<form onSubmit={handleSubmit}>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleEmail} value={emailCan} type="email" placeholder="E-mail" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-envelope" />
-								</span>
-							</p>
-						</div>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleFirstName} value={firstNameCan} type="text" placeholder="First Name" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-id-card-alt" />
-								</span>
-							</p>
-						</div>
-						<div className="field">
-							<p className="control has-icons-left">
-								<input className="input" onChange={handleLastName} value={lastNameCan} type="text" placeholder="Last Name" />
-								<span className="icon is-small is-left">
-									<i className="fas fa-id-card-alt" />
-								</span>
-							</p>
-						</div>
-                        <div className="field is-grouped is-grouped-centered mt-4">
-							<div className="file is-boxed">
-								<label className="file-label">
-									<input className="file-input" onChange={handleImages} type="file" multiple/>
-									<span className="file-cta">
-										<span className="file-icon">
-											<i className="fas fa-upload" />
-										</span>
-										<span className="file-label">
-											Upload Files
-										</span>
-									</span>
-								</label>
-							</div>
-						</div>
-						<button className="button is-primary">Apply</button>
-					</form>
-				</div>
-			</div>
-		</div>
+    function ShowDocuments(documentList){
+        console.log(documentList.documentList)
+        if (documentList.documentList.length == 0){
+            return(
+                <div className="is-size-6 has-text-justified">"Submitted documents: No available documents"</div>
+            )
+        }else if (documentList.documentList.length == 1){
+            return(
+                <div className="is-size-6 has-text-justified">
+                    Submitted documents:&nbsp;
+                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank">{documentList.documentList[0].documentType}</Link>
+                </div>
+            )
+        }
+        else{
+            return(
+                <div className="is-size-6 has-text-justified">
+                    Submitted documents:&nbsp;
+                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[0].documentType}</Link>,&nbsp;
+                    <Link to={"/document/" + documentList.documentList[1].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[1].documentType}</Link>
+                </div>
+            ) 
+        }
+    }
+
+    function EditBox(){
+        return(
+            <div className="column is-half-tablet is-one-third-widescreen is-offset-6">
+                <div className="box has-text-centered has-background-light ml-6 mt-6">
+                    <div className="field ">
+                        <label className="label">Edit Application Description</label>
+                    </div>
+                    <div className="field is-grouped">,
+                        <form onSubmit={sendEdit}>
+                            <input className="input" type="text" id="descriptionText" placeholder="Description"/>
+                            <button className="button is-danger is-rounded mt-5 mr-5"
+                            onClick = {() => {setEditBox(false)}}>
+                                <span className="icon is-big">
+                                    <i className="fas fa-times-circle" />
+                                </span>
+                                <span>Cancel</span>
+                            </button>
+                            <button className="button is-info is-rounded mt-5 ml-5" type="submit">
+                                <span className="icon is-big">
+                                    <i className="fas fa-edit" />
+                                </span>
+                                <span>Submit Description</span>
+                            </button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div>
+            <div className="columns is-centered">
+                <div className="column is-half-tablet is-one-third-widescreen mr-6 mt-6">
+                    <div className="box has-text-centered has-background-light">
+                            <div className="is-size-3 has-text-centered">
+                                Position name: {positionName}<br /><br />
+                            </div>
+                            <div className="is-size-6 has-text-justified">
+                                Position description: {positionDescription}<br /><br /><br />
+                            </div>
+                            <div className="columns is-size-5">
+                                <div className="column">
+                                    Required knowledge of: {(<RequiredLanguage languagearray={positionLanguages}/>)}
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div className="column is-half-tablet is-one-third-widescreen ml-6 mt-6">
+                    <div className="box has-text-centered has-background-light">
+                        <div className="is-size-6 has-text-centered mb-5">
+                            <label className="label">Canditate Info</label>
+                        </div>
+                        <div className="is-size-6 has-text-justified my-2">
+                                Email: {candidateEmail}
+                        </div>
+                        <div className="is-size-6 has-text-justified my-2">
+                                Name: {candidateName}
+                        </div>
+                        <div className="is-size-6 has-text-justified my-2">
+                                Application Description: {applicationDescription}
+                        </div>
+                        <div className="is-size-6 has-text-justified my-2">
+                                {<ShowDocuments documentList={documents}/>}
+                        </div>
+                        <div className="columns is-size-6 has-text-justified">
+                            <div className = "column is-6 has-text-centered">
+                                <button
+                                    className="button is-big is-warning is-rounded"
+                                    onClick = {() => {setEditBox(true)}}>
+                                        <span className="icon is-big">
+                                            <i className="fas fa-wrench" />
+                                        </span>
+                                        <span>Edit application decription</span>
+                                    </button>
+                            </div>
+                            <div className = "column is-6 has-text-centered">
+                                <button
+                                    className="button is-big is-success is-rounded">
+                                        <span className="icon is-big">
+                                            <i className="fas fa-check-circle" />
+                                        </span>
+                                        <span>Continue application</span>
+                                    </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="columns">
+                {editBox ? <EditBox/> : ''}
+            </div>
+        </div>
 	);
-
-
 }

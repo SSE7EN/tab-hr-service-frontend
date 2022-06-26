@@ -56,6 +56,9 @@ export default function Login(){
                             </form>
                         </div>
                         <div className="field">
+                            <NavLink to="/register_candidate">Don't have an account? Register</NavLink>
+                        </div>
+                        <div className="field">
                             <NavLink to="/resetpassword">I Forgot My Password</NavLink>
                         </div>
                     </div>

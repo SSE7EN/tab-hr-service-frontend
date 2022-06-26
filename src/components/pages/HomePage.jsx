@@ -25,7 +25,6 @@ export default function HomePage() {
 
     useEffect(() => {
         Axios.get(API_URL + '/positions', {
-            headers: getAuthHeader(),
             method: "get",
         })
         .then((response) => {
@@ -63,7 +62,7 @@ function NoPostions(){
         <div className="columns is-centered">
             <div className='column is-6 mt-5'>
                 <div className="is-size-2">
-                    No positions currenty awailable.<br/> Please try again later.<br />
+                    No positions currenty available.<br/> Please try again later.<br />
                 </div>
             </div>
         </div>
