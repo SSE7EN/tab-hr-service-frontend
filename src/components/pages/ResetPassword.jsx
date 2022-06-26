@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { getAuthHeader, getAdminHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
@@ -47,7 +46,6 @@ export default function ResetPassword(){
         }
         else {
 		Axios.patch(API_URL + "/users/current/password", {
-				headers: getAdminHeader(),
 				oldPassword: oldPassword,
 				newPassword: newPassword,
 			})

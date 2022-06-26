@@ -1,19 +1,12 @@
 import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router';
-import { NavLink } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { getAuthHeader, isAdmin } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
 
-import sampleCV from '../pdf/testCV.pdf';
-import sampleletter from '../pdf/motivational_letter.pdf';
-
 export default function Application() {
     const { id } = useParams();
-
-    const [editBox, setEditBox] = useState(false);
 
 	const[positionId, setPositionID] = useState(-1);
 	const[positionName, setPositionName] = useState('');
@@ -63,7 +56,7 @@ export default function Application() {
         .then((response) => {
             //console.log(response);
             Axios({
-                url: "http://localhost:8080/images/" + response.data.url,
+                url: API_URL + "/images/" + response.data.url,
                 method: 'GET',
                 headers: getAuthHeader(),
                 responseType: 'blob', // important

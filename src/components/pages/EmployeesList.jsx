@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config';
-import { getAuthHeader, getCurrentUserId } from '../../storedData';
+import {getAuthHeader} from '../../storedData';
 
 export default function EmployeesList() {
     const [state, setState] = useState({employee: [], searchInput: '', editedProductId: 0});
