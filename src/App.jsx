@@ -19,6 +19,7 @@ import ShowDocument from './components/pages/ShowDocument.jsx';
 import UsersApplications from './components/pages/UsersApplications.jsx'
 import Report from './components/pages/Report.jsx'
 import Meeting from './components/pages/Meeting'
+import MeetingsList from './components/pages/MeetingsList'
 
 export default function App() {
   return (
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/userapplications" element={<UsersApplications />} />
         <Route path="/report" element={<Report />} />
         <Route path="/meeting" element={<Meeting />} />
+        <Route path="/meetings" element={<MeetingsList />} />
     </Routes>
   </BrowserRouter>
   );

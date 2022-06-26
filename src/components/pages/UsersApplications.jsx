@@ -72,20 +72,20 @@ function Table({appicationList}) {
     if (appicationList.length == 0){
         return(
             <div className="columns is-centered is-multiline">
-            <div className='column is-6 mt-5'>
-                <div className="is-size-4">
-                    You don't have any active applications.
+                <div className='column is-12 has-text-centered  mt-5'>
+                    <div className="is-size-4">
+                        You don't have any active applications.
+                    </div>
+                </div>
+                <div className='column is-12 has-text-centered mt-5'>
+                    <button className="button is-rounded is-info" onClick={() => {navigate("/userapplications"); }}>
+                            <span className="icon">
+                                <i className="fas fa-file-alt"></i>
+                            </span>
+                            <span>Check your applications</span>
+                    </button>
                 </div>
             </div>
-            <div className='column is-6 is-offset-3 mt-5'>
-                <button className="button is-info" onClick={() => {navigate("/"); }}>
-                        <span className="icon">
-                            <i className="fas fa-home"></i>
-                        </span>
-                        <span>Find postitions</span>
-                </button>
-            </div>
-        </div>
         )
     }
     else{
