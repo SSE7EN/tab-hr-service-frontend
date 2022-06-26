@@ -2,7 +2,7 @@ import React, { useEffect,useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { getAuthHeader, getAdminHeader } from '../../storedData';
+import { getAuthHeader, isAdmin } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
@@ -53,14 +53,42 @@ export default function Application() {
         
     }, []);
 
+    const showDocument = (_id) =>{
+        console.log(_id)
+        Axios.get(API_URL + "/documents/" + _id, {
+            headers: getAuthHeader()
+        })
+        .then((response) => {
+            //console.log(response);
+            Axios({
+                url: "http://localhost:8080/images/" + response.data.url,
+                method: 'GET',
+                headers: getAuthHeader(),
+                responseType: 'blob', // important
+              }).then((response) => {
+                console.log(response)
+                 const url = window.URL.createObjectURL(new Blob([response.data]));
+                 const link = document.createElement('a');
+                 link.href = url;
+                 link.setAttribute('download', 'file.pdf'); //or any other extension
+                 document.body.appendChild(link);
+                 link.click();
+              });
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     const sendEdit = (e) => {
         e.preventDefault();
-        Axios.put(API_URL + "/applications/" + id, {
+        const data = {
+            positionId: positionId,
+            description: document.getElementById("descriptionText").value
+        };
+        
+        Axios.put(API_URL + "/applications/" + id, data,{
             headers: getAuthHeader(),
-            data: {
-                positionId: positionId,
-                description: document.getElementById("descriptionText").value
-            }
         })
         .then((response) => {
             console.log(response);
@@ -95,55 +123,34 @@ export default function Application() {
         console.log(documentList.documentList)
         if (documentList.documentList.length == 0){
             return(
-                <div className="is-size-6 has-text-justified">"Submitted documents: No available documents"</div>
+                <div className="is-size-6 has-text-justified">Submitted documents: No available documents</div>
             )
         }else if (documentList.documentList.length == 1){
             return(
                 <div className="is-size-6 has-text-justified">
-                    Submitted documents:&nbsp;
-                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank">{documentList.documentList[0].documentType}</Link>
+                    Submitted documents:
+                    <button class="button is-small is-rounded is-link mx-5"
+                    onClick = {()=>{showDocument(documentList.documentList[0].id)}}>
+                        {documentList.documentList[0].documentType}
+                        </button>
                 </div>
             )
         }
         else{
             return(
-                <div className="is-size-6 has-text-justified">
-                    Submitted documents:&nbsp;
-                    <Link to={"/document/" + documentList.documentList[0].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[0].documentType}</Link>,&nbsp;
-                    <Link to={"/document/" + documentList.documentList[1].id} target="_blank" rel="noopener noreferrer">{documentList.documentList[1].documentType}</Link>
-                </div>
+                <div className="has-text-justified">
+                    Submitted documents:
+                    <button class="button is-small is-rounded is-link mx-5"
+                    onClick = {()=>{showDocument(documentList.documentList[0].id)}}>
+                        {documentList.documentList[0].documentType}
+                    </button>
+                    <button class="button is-small is-rounded is-link mx-5"
+                    onClick = {()=>{showDocument(documentList.documentList[1].id)}}>
+                        {documentList.documentList[1].documentType}
+                    </button>
+               </div>
             ) 
         }
-    }
-
-    function EditBox(){
-        return(
-            <div className="column is-half-tablet is-one-third-widescreen is-offset-6">
-                <div className="box has-text-centered has-background-light ml-6 mt-6">
-                    <div className="field ">
-                        <label className="label">Edit Application Description</label>
-                    </div>
-                    <div className="field is-grouped">,
-                        <form onSubmit={sendEdit}>
-                            <input className="input" type="text" id="descriptionText" placeholder="Description"/>
-                            <button className="button is-danger is-rounded mt-5 mr-5"
-                            onClick = {() => {setEditBox(false)}}>
-                                <span className="icon is-big">
-                                    <i className="fas fa-times-circle" />
-                                </span>
-                                <span>Cancel</span>
-                            </button>
-                            <button className="button is-info is-rounded mt-5 ml-5" type="submit">
-                                <span className="icon is-big">
-                                    <i className="fas fa-edit" />
-                                </span>
-                                <span>Submit Description</span>
-                            </button>
-                            </form>
-                    </div>
-                </div>
-            </div>
-        )
     }
 
     return (
@@ -181,18 +188,8 @@ export default function Application() {
                         <div className="is-size-6 has-text-justified my-2">
                                 {<ShowDocuments documentList={documents}/>}
                         </div>
-                        <div className="columns is-size-6 has-text-justified">
-                            <div className = "column is-6 has-text-centered">
-                                <button
-                                    className="button is-big is-warning is-rounded"
-                                    onClick = {() => {setEditBox(true)}}>
-                                        <span className="icon is-big">
-                                            <i className="fas fa-wrench" />
-                                        </span>
-                                        <span>Edit application decription</span>
-                                    </button>
-                            </div>
-                            <div className = "column is-6 has-text-centered">
+                        <div className="columns is-size-6 has-text-justified mt-3">
+                            <div className = "column has-text-centered" style={{ display: isAdmin() ? '' : 'none' }}>
                                 <button
                                     className="button is-big is-success is-rounded">
                                         <span className="icon is-big">
@@ -204,9 +201,6 @@ export default function Application() {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="columns">
-                {editBox ? <EditBox/> : ''}
             </div>
         </div>
 	);
