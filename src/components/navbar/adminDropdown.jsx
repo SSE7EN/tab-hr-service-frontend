@@ -21,6 +21,7 @@ export default function adminDropdown({ user }) {
                     <NavLink to="/employeeslist">Employees List</NavLink>
                     <NavLink to="/positionlist">Positions List</NavLink>
                     <NavLink to="/position">Create Position</NavLink>
+                    <NavLink to="/report">Report</NavLink>
                     <NavLink to="/logout">Logout</NavLink>
                 </div>
             </div>

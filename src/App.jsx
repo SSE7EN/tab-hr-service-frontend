@@ -17,6 +17,7 @@ import PositionsList from './components/pages/PositionsList.jsx';
 import ApplicationSent from './components/pages/ApplicationSent.jsx';
 import ShowDocument from './components/pages/ShowDocument.jsx';
 import UsersApplications from './components/pages/UsersApplications.jsx'
+import Report from './components/pages/Report.jsx'
 
 
 
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/applicationsent" element={<ApplicationSent />} />
         <Route path="/document/:id" element={<ShowDocument />} />
         <Route path="/userapplications" element={<UsersApplications />} />
+        <Route path="/report" element={<Report />} />
     </Routes>
   </BrowserRouter>
   );
