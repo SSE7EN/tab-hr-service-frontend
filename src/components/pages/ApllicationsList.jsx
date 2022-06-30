@@ -8,8 +8,6 @@ export default function ApllicationsList() {
     const [state, setState] = useState({applications: [], editBox: false});
     const navigate = useNavigate();
 
-    const [positionId, setPositionId] = useState(-1);
-    const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
     const[id, setId] = useState(-1);
     const [isError, setIsError] = useState(false);
@@ -51,12 +49,10 @@ export default function ApllicationsList() {
         e.preventDefault();
 
         const data = {
-            positionId: positionId,
-            description: description,
             status: status
         }
 
-        Axios.put(API_URL + "/applications/" + id, data,{
+        Axios.patch(API_URL + "/applications/status/" + id, data,{
             headers: getAuthHeader(),
         })
         .then((response) => {
@@ -98,8 +94,6 @@ export default function ApllicationsList() {
         console.log("id", e.currentTarget.id, state.applications);
         e.preventDefault();
         setId(e.currentTarget.id);
-        setPositionId(state.applications[e.currentTarget.id-1].position.id);
-        setDescription(state.applications[e.currentTarget.id-1].description);
     }
 
     return (
@@ -170,16 +164,16 @@ export default function ApllicationsList() {
         var status = _status._status;
         if (status == 'IN_PROGRESS'){
             return(
-                <div class="has-text-warning-dark">In Progress</div>
+                <div className="has-text-warning-dark">In Progress</div>
                
             )
         }else if (status == 'ACCEPTED'){
             return( 
-                <div class="has-text-success">Accepted</div>
+                <div className="has-text-success">Accepted</div>
             )
         }else if (status == 'REJECTED'){
             return(
-                <div class="has-text-danger">Rejected</div>
+                <div className="has-text-danger">Rejected</div>
             )
         }else{
             return(

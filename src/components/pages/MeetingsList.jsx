@@ -23,7 +23,7 @@ export default function MeetingsList() {
     };
 
     useEffect(() => {
-        if (NaN(getCurrentUserId())){
+        if (isNaN(getCurrentUserId())){
             navigate("/", { replace: true });
         }
         if (isAdmin()){

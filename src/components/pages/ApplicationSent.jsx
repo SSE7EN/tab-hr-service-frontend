@@ -25,7 +25,7 @@ export default function ApplicationSent(){
     };
 
     useEffect(() => {
-        if (NaN(getCurrentUserId())){
+        if (isNaN(getCurrentUserId())){
             navigate("/", { replace: true });
         }
         console.log("applicationID " + state.applicationID)

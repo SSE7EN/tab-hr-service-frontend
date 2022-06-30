@@ -154,7 +154,7 @@ export default function Apply() {
         }
     };
 	useEffect(() => {
-		if (NaN(getCurrentUserId())){
+		if (isNaN(getCurrentUserId())){
             navigate("/", { replace: true });
         }
 		Axios.get(API_URL + "/positions/" + id, {
