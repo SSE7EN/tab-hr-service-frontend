@@ -34,7 +34,7 @@ export default function UsersApplications() {
         .catch(handleError);
         
     }, []);
-
+ 
     return (
         <div className="columns is-mobile is-multiline is-centered">
             <div className="column is-6 mt-3">
@@ -44,6 +44,29 @@ export default function UsersApplications() {
     );
 
 }
+
+function ShowStatus(_status){
+    var status = _status._status;
+    if (status == 'IN_PROGRESS'){
+        return(
+            <div class="has-text-warning-dark">In Progress</div>
+           
+        )
+    }else if (status == 'ACCEPTED'){
+        return( 
+            <div class="has-text-success">Accepted</div>
+        )
+    }else if (status == 'REJECTED'){
+        return(
+            <div class="has-text-danger">Rejected</div>
+        )
+    }else{
+        return(
+            <div class="has-text-warning-dark">In Progress</div>
+        )
+    }
+}
+
 
 function RequiredLanguage(languagearray){
     let languages = "";
@@ -71,20 +94,20 @@ function Table({appicationList}) {
     if (appicationList.length == 0){
         return(
             <div className="columns is-centered is-multiline">
-                <div className='column is-12 has-text-centered  mt-5'>
-                    <div className="is-size-4">
-                        You don't have any active applications.
-                    </div>
-                </div>
-                <div className='column is-12 has-text-centered mt-5'>
-                    <button className="button is-rounded is-info" onClick={() => {navigate("/userapplications"); }}>
-                            <span className="icon">
-                                <i className="fas fa-file-alt"></i>
-                            </span>
-                            <span>Check your applications</span>
-                    </button>
+            <div className='column has-text-centered is-12 mt-5'>
+                <div className="is-size-4">
+                    You don't have any applications.
                 </div>
             </div>
+            <div className='column is-12 has-text-centered mt-5'>
+                <button className="button is-rounded is-info" onClick={() => {navigate("/"); }}>
+                        <span className="icon">
+                            <i className="fas fa-home"></i>
+                        </span>
+                        <span>Find postitions</span>
+                </button>
+            </div>
+        </div>
         )
     }
     else{
@@ -97,6 +120,7 @@ function Table({appicationList}) {
                         <th  className="is-vcentered">position name</th>
                         <th  className="is-vcentered">position description</th>
                         <th  className="is-vcentered">position languagues</th>
+                        <th  className="is-vcentered">Status</th>
                         <th  className="is-vcentered">Actions</th>
                     </tr>
                 </thead>
@@ -108,6 +132,7 @@ function Table({appicationList}) {
                                 <td  className="is-vcentered">{list.position.name}</td>
                                 <td  className="is-vcentered">{list.position.description}</td>
                                 <td  className="is-vcentered">{(<RequiredLanguage languagearray={list.position.programmingLanguages}/>)}</td>
+                                <td  className="is-vcentered">{(<ShowStatus _status={list.status}/>)}</td>
                                 <td  className="is-vcentered">
                                     <button className="button is-small is-rounded is-info"
                                     onClick={() => {navigate("/Application/" + list.id); }}>

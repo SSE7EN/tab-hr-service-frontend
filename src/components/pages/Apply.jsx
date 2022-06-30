@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import {getAuthHeader} from '../../storedData';
+import {getAuthHeader, getCurrentUserId} from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
@@ -154,6 +154,9 @@ export default function Apply() {
         }
     };
 	useEffect(() => {
+		if (isNaN(getCurrentUserId())){
+            navigate("/", { replace: true });
+        }
 		Axios.get(API_URL + "/positions/" + id, {
             headers: getAuthHeader()
         })

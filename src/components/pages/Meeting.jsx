@@ -141,7 +141,7 @@ export default function Meeting() {
                         {meetingCreated && successfullmeeting()}
                     </div>
                     <div className="box has-text-centered has-background-light">
-                        <div className="has-text-centered is-size-3 mb-4">Position Form</div>
+                        <div className="has-text-centered is-size-3 mb-4">Meeting Form</div>
                         <form onSubmit={handleSubmit}>
                             <div className="mt-2">
                                 Main Interviewer:<br/ >

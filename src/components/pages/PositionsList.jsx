@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config';
-import { getAuthHeader} from '../../storedData';
+import { getAuthHeader, isAdmin} from '../../storedData';
 
 export default function PositionsList() {
     const [state, setState] = useState({positionsExist: false, positions: [], editedProductId: 0, editBox: false});
@@ -50,6 +50,9 @@ export default function PositionsList() {
     };
 
     useEffect(() => {
+        if (!isAdmin()){
+            navigate("/", { replace: true });   //redirect not logged in
+        }
         Axios.get(API_URL + '/positions?sort=id', {
             headers: getAuthHeader(),
             method: "get",
@@ -66,8 +69,8 @@ export default function PositionsList() {
         
         const data = {
             name: name,
-                description: description,
-                programmingLanguages: languages
+            description: description,
+            programmingLanguages: languages
         }
 
         Axios.put(API_URL + "/positions/" + id, data,{
@@ -142,7 +145,7 @@ export default function PositionsList() {
                                 <div className="field is-grouped">,
                                     <form onSubmit={sendEdit}>
                                         <input className="input" type="text" value={name} placeholder="Name" onChange={handleName}/>
-                                        <input className="input mt-3" type="text" placeholder="Description" onChange={handleDescription}/>
+                                        <input className="input mt-3" value={description} type="text" placeholder="Description" onChange={handleDescription}/>
                                         <div className="select is-multiple is-small is-left mt-3" onChange={handleProgrammingLanguage}>
                                             <select multiple  size="4">
                                                 <option value="C_PLUS_PLUS">C++</option>
@@ -151,7 +154,7 @@ export default function PositionsList() {
                                                 <option value="PYTHON">Python</option>
                                             </select>
                                         </div>
-                                        <button className="button is-danger is-rounded ml-6 mt-6 mr-5"
+                                        <button className="button is-danger is-rounded ml-6 mt-6 mr-5" type="reset"
                                         onClick = {() => {setState({positionsExist: state.positionsExist, positions: state.positions, editedProductId: state.editedProductId, editBox: false})}}>
                                             <span className="icon is-big">
                                                 <i className="fas fa-times-circle" />

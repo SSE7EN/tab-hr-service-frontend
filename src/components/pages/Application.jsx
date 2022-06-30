@@ -4,6 +4,7 @@ import { getAuthHeader, isAdmin } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
+import {getCurrentUserId} from '../../storedData'
 
 export default function Application() {
     const { id } = useParams();
@@ -13,6 +14,7 @@ export default function Application() {
 	const[positionDescription, setPositionDescription] = useState('');
 	const[positionLanguages, setPositionLanguages] = useState([]);
 
+    const[applicationStatus, setApplicationStatus] = useState('');
     const[candidadateID, setCandidateId] = useState(0);
     const[candidateEmail, setCandidateEmail] = useState('');
     const[candidateName, setCandidateName] = useState('');
@@ -25,6 +27,9 @@ export default function Application() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+        if (isNaN(getCurrentUserId())){
+            navigate("/", { replace: true });
+        }
         Axios.get(API_URL + "/applications/" + id, {
             headers: getAuthHeader()
         })
@@ -35,6 +40,7 @@ export default function Application() {
             setPositionDescription(response.data.position.description);
             setPositionLanguages(response.data.position.programmingLanguages);
 
+            setApplicationStatus(response.data.status);
             setCandidateId(response.data.candidate.user.id);
             setCandidateEmail(response.data.candidate.user.email);
             setCandidateName(response.data.candidate.user.firstName + " " + response.data.candidate.user.lastName);
@@ -65,7 +71,8 @@ export default function Application() {
                  const url = window.URL.createObjectURL(new Blob([response.data]));
                  const link = document.createElement('a');
                  link.href = url;
-                 link.setAttribute('download', 'file.pdf'); //or any other extension
+                 link.setAttribute('target','_blank');
+                // link.setAttribute('download', 'file.pdf'); //or any other extension
                  document.body.appendChild(link);
                  link.click();
               });
@@ -149,6 +156,28 @@ export default function Application() {
         }
     }
 
+    function ShowStatus(){
+        console.log(applicationStatus)
+        if (applicationStatus == 'IN_PROGRESS'){
+            return(
+                <div className="has-text-warning-dark">In Progress</div>
+               
+            )
+        }else if (applicationStatus == 'ACCEPTED'){
+            return( 
+                <div className="has-text-success">Accepted</div>
+            )
+        }else if (applicationStatus == 'REJECTED'){
+            return(
+                <div className="has-text-danger">Rejected</div>
+            )
+        }else{
+            return(
+                <div class="has-text-warning-dark">In Progress</div>
+            )
+        }
+    }
+
     return (
         <div>
             <div className="columns is-centered">
@@ -184,7 +213,11 @@ export default function Application() {
                         <div className="is-size-6 has-text-justified my-2">
                                 {<ShowDocuments documentList={documents}/>}
                         </div>
-                        <div className="columns is-size-6 has-text-justified mt-3">
+                        <div className="is-size-6 has-text-centered mb-5">
+                            <label className="label">Application Status: {(<ShowStatus/>)}</label>
+                        </div>
+                        
+                        <div className="columns is-size-6 has-text-justified mt-3" style={{ display: (applicationStatus=="IN_PROGRESS" || applicationStatus==null) ? '' : 'none' }}>
                             <div className = "column has-text-centered" style={{ display: isAdmin() ? '' : 'none' }}>
                                 <button
                                     className="button is-big is-success is-rounded"

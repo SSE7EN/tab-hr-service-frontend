@@ -3,7 +3,7 @@ import {getAuthHeader} from '../../storedData';
 import { useNavigate, useLocation } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
-
+import {getCurrentUserId} from '../../storedData'
 
 
 export default function ApplicationSent(){
@@ -25,6 +25,9 @@ export default function ApplicationSent(){
     };
 
     useEffect(() => {
+        if (isNaN(getCurrentUserId())){
+            navigate("/", { replace: true });
+        }
         console.log("applicationID " + state.applicationID)
         console.log("CVID " + state.CV_ID)
         console.log("MLID " + state.ML_ID)
