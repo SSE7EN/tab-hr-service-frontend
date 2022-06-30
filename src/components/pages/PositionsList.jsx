@@ -145,7 +145,7 @@ export default function PositionsList() {
                                 <div className="field is-grouped">,
                                     <form onSubmit={sendEdit}>
                                         <input className="input" type="text" value={name} placeholder="Name" onChange={handleName}/>
-                                        <input className="input mt-3" type="text" placeholder="Description" onChange={handleDescription}/>
+                                        <input className="input mt-3" value={description} type="text" placeholder="Description" onChange={handleDescription}/>
                                         <div className="select is-multiple is-small is-left mt-3" onChange={handleProgrammingLanguage}>
                                             <select multiple  size="4">
                                                 <option value="C_PLUS_PLUS">C++</option>

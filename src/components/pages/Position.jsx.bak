@@ -22,12 +22,13 @@ export default function Position() {
         setNameCan(e.target.value);
     };
 
+<<<<<<< Updated upstream
     useEffect(() => {
         if (!isAdmin()){
             navigate("/", { replace: true });   //redirect not logged in
         }
     }, []);
-
+=======
     const successfullposition = () => {
 		return (
 			<div className="notification is-success">
@@ -35,7 +36,7 @@ export default function Position() {
 			</div>
 		);
 	};
-
+>>>>>>> Stashed changes
 
     const handleProgrammingLanguage = (event) => {
         var array = [event.target.selectedOptions.length];
