@@ -4,6 +4,7 @@ import { getAuthHeader, isAdmin } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
+import {getCurrentUserId} from '../../storedData'
 
 export default function Application() {
     const { id } = useParams();
@@ -25,6 +26,9 @@ export default function Application() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
+        if (NaN(getCurrentUserId())){
+            navigate("/", { replace: true });   //redirect not logged in
+        }
         Axios.get(API_URL + "/applications/" + id, {
             headers: getAuthHeader()
         })

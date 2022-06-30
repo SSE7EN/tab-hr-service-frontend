@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAuthHeader } from '../../storedData';
 import { useNavigate } from 'react-router';
 import API_URL from '../../config'
 import Axios from "axios";
+import {isAdmin} from '../../storedData';
 
 export default function RegisterUser() {
 	const [emailReg, setEailReg] = useState('');
@@ -32,6 +33,12 @@ export default function RegisterUser() {
 	const handleLastName = (e) => {
 		setLastNameReg(e.target.value);
 	};
+
+	useEffect(() => {
+        if (!isAdmin()){
+            navigate("/", { replace: true });   //redirect not logged in
+        }
+    }, []);
 
 	const handleError = (error) => {
         console.log(error);

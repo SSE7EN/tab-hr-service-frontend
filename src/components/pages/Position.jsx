@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Axios from "axios";
 import API_URL from "../../config";
-import { getAuthHeader } from "../../storedData";
+import { getAuthHeader, isAdmin } from "../../storedData";
+
+
 export default function Position() {
     const [descriptionCan, setDescriptionCan] = useState("");
     const [nameCan, setNameCan] = useState("");
@@ -17,6 +19,12 @@ export default function Position() {
     const handleName = (e) => {
         setNameCan(e.target.value);
     };
+
+    useEffect(() => {
+        if (!isAdmin()){
+            navigate("/", { replace: true });   //redirect not logged in
+        }
+    }, []);
 
     const handleProgrammingLanguage = (event) => {
         var array = [event.target.selectedOptions.length];

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config';
-import {getAuthHeader} from '../../storedData';
+import {getAuthHeader, isAdmin} from '../../storedData';
 
 export default function EmployeesList() {
     const [state, setState] = useState({employee: [], searchInput: '', editedProductId: 0});
@@ -23,6 +23,9 @@ export default function EmployeesList() {
     };
 
     useEffect(() => {
+        if (!isAdmin()){
+            navigate("/", { replace: true });   //redirect not logged in
+        }
         Axios.get(API_URL + '/users?sort=id', {
             headers: getAuthHeader(),
             method: "get",

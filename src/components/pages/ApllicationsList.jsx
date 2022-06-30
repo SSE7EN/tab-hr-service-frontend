@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import API_URL from '../../config';
-import { getAuthHeader} from '../../storedData';
+import { getAuthHeader, isAdmin} from '../../storedData';
 
 export default function ApllicationsList() {
-    const [state, setState] = useState({applications: [], searchInput: '', editedProductId: 0});
+    const [state, setState] = useState({applications: [], editBox: false});
     const navigate = useNavigate();
 
+    const [positionId, setPositionId] = useState(-1);
+    const [description, setDescription] = useState("");
+    const [status, setStatus] = useState("");
+    const[id, setId] = useState(-1);
     const [isError, setIsError] = useState(false);
 
 	const [error, setError] = useState({});
@@ -22,21 +26,49 @@ export default function ApllicationsList() {
         }
     };
 
+    const handleStatus = (e) => {
+        e.preventDefault();
+        setStatus(e.target.value);
+    };
+
     useEffect(() => {
-        Axios(API_URL + '/applications?sort=id', {
+        if (!isAdmin()){
+            navigate("/", { replace: true });
+        }
+        Axios(API_URL + '/applications?sort=id&size=20', {
             headers: getAuthHeader(),
             method: "get",
         })
         .then((response) => {
-            console.log(response);
-            setState({applications:response.data.content, searchInput: state.searchInput, editedProductId: state.editedProductId});
+            //console.log(response);
+            setState({applications:response.data.content, editBox: false});
         })
         .catch(handleError);
         
     }, []);
 
+    const sendEdit = (e) => {
+        e.preventDefault();
+
+        const data = {
+            positionId: positionId,
+            description: description,
+            status: status
+        }
+
+        Axios.put(API_URL + "/applications/" + id, data,{
+            headers: getAuthHeader(),
+        })
+        .then((response) => {
+            console.log(response);
+            window.location.reload(false);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
     const showDocument = (_id) =>{
-        console.log(_id)
         Axios.get(API_URL + "/documents/" + _id, {
             headers: getAuthHeader()
         })
@@ -62,15 +94,56 @@ export default function ApllicationsList() {
         })
     }
 
+    const changeID = (e) => {
+        console.log("id", e.currentTarget.id, state.applications);
+        e.preventDefault();
+        setId(e.currentTarget.id);
+        setPositionId(state.applications[e.currentTarget.id-1].position.id);
+        setDescription(state.applications[e.currentTarget.id-1].description);
+    }
+
     return (
         <div className="columns is-mobile is-multiline is-centered">
-            <div className="column is-6 mt-3">
+            <div className="column is-8 mt-3">
                 {<Table appicationList={state.applications}/>}
             </div>
+            <div className="column is-2 is-offset-6"  style={{ display: state.editBox ? '' : 'none' }}>
+                            <div className="box has-text-centered has-background-ligh">
+                                <div className="field ">
+                                    <label className="label">Edit Application nr {id}</label>
+                                </div>
+                                <div className="field">,
+                                    <form onSubmit={sendEdit}>
+                                        <div className="select is-primary is-left  mb-3" onChange={handleStatus}>
+                                            <select>
+                                                <option value="IN_PROGRESS">Status: In Progress</option>
+                                                <option value="ACCEPTED">Status: Accepted</option>
+                                                <option value="REJECTED">Status: Rejected</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <button className="button is-danger is-rounded mt-5 mr-1"
+                                            onClick = {() => {setState({applications: state.applications, editBox: false})}}>
+                                                <span className="icon is-big">
+                                                    <i className="fas fa-times-circle" />
+                                                </span>
+                                                <span>Cancel</span>
+                                            </button>
+                                            <button className="button is-primary is-rounded mt-5 ml-1" type="submit">
+                                                <span className="icon is-big">
+                                                    <i className="fas fa-edit" />
+                                                </span>
+                                                <span>Save status</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
         </div>
     );
 
-
+    
 
     function RequiredLanguage(languagearray){
         let languages = "";
@@ -92,9 +165,31 @@ export default function ApllicationsList() {
         languages = languages.slice(2);
         return languages
     }
+
+    function ShowStatus(_status){
+        var status = _status._status;
+        if (status == 'IN_PROGRESS'){
+            return(
+                <div class="has-text-warning-dark">In Progress</div>
+               
+            )
+        }else if (status == 'ACCEPTED'){
+            return( 
+                <div class="has-text-success">Accepted</div>
+            )
+        }else if (status == 'REJECTED'){
+            return(
+                <div class="has-text-danger">Rejected</div>
+            )
+        }else{
+            return(
+                <div class="has-text-warning-dark">In Progress</div>
+            )
+        }
+    }
+    
     
     function ShowDocumentsButtons(documents){
-        console.log(documents.documents)
         if (documents.documents.length == 0){
             return(
                 "none"
@@ -102,7 +197,7 @@ export default function ApllicationsList() {
         }else if (documents.documents.length == 1){
             return(
                 <div className="is-size-6 has-text-centered">
-                    <button class="button is-small is-rounded is-link"
+                    <button className="button is-small is-rounded is-link"
                     onClick = {()=>{showDocument(documents.documents[0].id)}}>
                         {documents.documents[0].documentType}
                     </button>
@@ -111,11 +206,11 @@ export default function ApllicationsList() {
         }else{
             return(
                 <div className="has-text-centered">
-                    <button class="button is-small is-rounded is-link mr-1"
+                    <button className="button is-small is-rounded is-link mr-1"
                     onClick = {()=>{showDocument(documents.documents[0].id)}}>
                         {documents.documents[0].documentType}
                     </button>
-                    <button class="button is-small is-rounded is-link ml-1"
+                    <button className="button is-small is-rounded is-link ml-1"
                     onClick = {()=>{showDocument(documents.documents[1].id)}}>
                         {documents.documents[1].documentType}
                     </button>
@@ -136,6 +231,7 @@ export default function ApllicationsList() {
                         <th  className="is-vcentered">position description</th>
                         <th  className="is-vcentered">position languagues</th>
                         <th  className="is-vcentered">Documents</th>
+                        <th  className="is-vcentered">Status</th>
                         <th  className="is-vcentered">Actions</th>
                     </tr>
                 </thead>
@@ -148,15 +244,23 @@ export default function ApllicationsList() {
                                 <td  className="is-vcentered">{list.position.description}</td>
                                 <td  className="is-vcentered">{(<RequiredLanguage languagearray={list.position.programmingLanguages}/>)}</td>
                                 <td  className="is-vcentered">{(<ShowDocumentsButtons documents={list.documents}/>)}</td>
+                                <td  className="is-vcentered">{(<ShowStatus _status={list.status}/>)}</td>
                                 <td  className="is-vcentered">
-                                    <button className="button is-small is-rounded is-info"
+                                    <button className="button is-small is-rounded is-info" type="reset"
                                     onClick={() => {navigate("/Application/" + list.id); }}>
                                         <span className="icon is-small">
                                             <i className="fas fa-info"/>
                                         </span>
                                         <span>Show Details</span>
                                     </button>
-
+                                    <button className="button is-small is-rounded is-warning" id={list.id}
+                                    onClick = {(e) => {setState({applications: state.applications, editBox: true});
+                                    changeID(e)}}>
+                                        <span className="icon is-small">
+                                            <i className="fas fa-cogs"/>
+                                        </span>
+                                        <span>Change Status</span>
+                                    </button>
                                 </td>
                             </tr>
                         )
